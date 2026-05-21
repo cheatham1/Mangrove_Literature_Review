@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Literature Review Dashboard — Plastic Pollution in Mangrove Ecosystems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #F6F4F0;
+    --surface: #FFFFFF;
+    --surface-alt: #EDE9E3;
+    --text: #1A1A18;
+    --text-secondary: #5E5C56;
+    --text-tertiary: #908E88;
+    --border: #D8D5CE;
+    --teal: #1B7A5A;
+    --teal-light: #D4EDE3;
+    --blue: #2E5FA1;
+    --blue-light: #D6E4F5;
+    --amber: #8B6914;
+    --amber-light: #F5EDD4;
+    --purple: #5C3DAF;
+    --purple-light: #E4DFF5;
+    --coral: #C05530;
+    --coral-light: #FAECE7;
+    --pink: #993556;
+    --green: #3B8BD4;
+    --gray: #888780;
+    --font-display: 'Source Serif 4', Georgia, serif;
+    --font-body: 'Outfit', system-ui, sans-serif;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161614;
+      --surface: #222220;
+      --surface-alt: #2C2C2A;
+      --text: #E8E6E0;
+      --text-secondary: #B0AEA6;
+      --text-tertiary: #7A7872;
+      --border: #3A3A36;
+      --teal-light: #0A3328;
+      --blue-light: #142840;
+      --amber-light: #3A2E10;
+      --purple-light: #261A48;
+      --coral-light: #3A1A0C;
+      --shadow: 0 1px 3px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.15);
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page-wrap {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    margin-bottom: 40px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--teal);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .header-meta {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+  .header-meta span { 
+    display: inline-block;
+    margin-right: 6px;
+  }
+  .header-meta .sep {
+    color: var(--border);
+    margin: 0 4px;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab-btn {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-tertiary);
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .tab-btn:hover { color: var(--text-secondary); }
+  .tab-btn.active {
+    color: var(--teal);
+    font-weight: 500;
+    border-bottom-color: var(--teal);
+  }
+
+  .tab-panel { display: none; animation: fadeIn 0.3s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Stat cards */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    border-left: 4px solid var(--teal);
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease;
+  }
+  .stat-card:hover { transform: translateY(-2px); }
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-top: 6px;
+  }
+  .stat-sub {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+    font-weight: 300;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 36px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .section-sub {
+    font-size: 12.5px;
+    color: var(--text-tertiary);
+    margin-bottom: 18px;
+    font-weight: 300;
+    max-width: 700px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+
+  /* Chart containers */
+  .chart-grid {
+    display: grid;
+    gap: 20px;
+  }
+  .chart-grid-2 { grid-template-columns: 1.2fr 0.8fr; }
+  .chart-grid-2eq { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 700px) {
+    .chart-grid-2, .chart-grid-2eq { grid-template-columns: 1fr; }
+  }
+  .chart-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin-top: 12px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* Heatmap */
+  .heatmap-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .heatmap-table th {
+    text-align: center;
+    padding: 8px 10px;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .heatmap-table th:first-child { text-align: left; }
+  .heatmap-table td {
+    padding: 7px 10px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .heatmap-table td:first-child {
+    text-align: left;
+    color: var(--text-secondary);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+  .heat-cell {
+    border-radius: 4px;
+    padding: 4px 8px;
+    display: inline-block;
+    min-width: 28px;
+    font-weight: 500;
+  }
+
+  /* Gap flags */
+  .gap-flag {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--amber-light);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .gap-flag-label {
+    font-weight: 600;
+    color: var(--amber);
+    white-space: nowrap;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 1px;
+  }
+
+  /* Progress bars */
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 5px 0;
+  }
+  .progress-label {
+    width: 150px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .progress-track {
+    flex: 1;
+    height: 10px;
+    background: var(--surface-alt);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.6s ease;
+  }
+  .progress-value {
+    width: 55px;
+    text-align: right;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+  }
+
+  /* Thematic gap cards */
+  .gap-card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 600px) { .gap-card-grid { grid-template-columns: 1fr; } }
+  .gap-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .gap-card-region {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .gap-card-value {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--coral);
+    margin: 2px 0;
+  }
+  .gap-card-note {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    line-height: 1.45;
+    font-weight: 300;
+  }
+
+  /* Thematic bullet list */
+  .theme-gap {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .theme-gap-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--coral);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .theme-gap-title {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .theme-gap-desc {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+    font-weight: 300;
+  }
+
+  /* Checklist */
+  .checklist label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    padding: 4px 0;
+    cursor: pointer;
+    font-weight: 300;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    accent-color: var(--teal);
+  }
+
+  /* Keywords bar list */
+  .kw-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 28px;
+  }
+  @media (max-width: 600px) { .kw-grid { grid-template-columns: 1fr; } }
+  .kw-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+  }
+  .kw-label {
+    flex: 1;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+  .kw-bar-track {
+    width: 90px;
+    height: 8px;
+    background: var(--surface-alt);
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .kw-bar-fill {
+    height: 100%;
+    background: var(--teal);
+    border-radius: 4px;
+  }
+  .kw-count {
+    width: 24px;
+    text-align: right;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    text-align: center;
+    font-weight: 300;
+  }
+
+  /* Print styles */
+  @media print {
+    body { background: #fff; }
+    .tabs { display: none; }
+    .tab-panel { display: block !important; page-break-inside: avoid; margin-bottom: 40px; }
+    .tab-panel::before {
+      content: attr(data-title);
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 16px;
+      color: var(--teal);
+    }
+    .stat-card:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-eyebrow">Literature review dashboard</div>
+    <h1>Plastic pollution in mangrove ecosystems</h1>
+    <div class="header-meta">
+      <span>224 references</span>
+      <span class="sep">·</span>
+      <span>Data snapshot 21 May 2026</span>
+      <span class="sep">·</span>
+      <span>Scoring incomplete (151 of 224)</span>
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" onclick="switchTab('overview')" role="tab">Overview</button>
+    <button class="tab-btn" onclick="switchTab('quality')" role="tab">Quality &amp; scoring</button>
+    <button class="tab-btn" onclick="switchTab('geography')" role="tab">Geography</button>
+    <button class="tab-btn" onclick="switchTab('gaps')" role="tab">Gaps &amp; flags</button>
+  </div>
+
+  <!-- ==================== OVERVIEW ==================== -->
+  <div id="tab-overview" class="tab-panel active" data-title="Overview">
+
+    <div class="stats-row">
+      <div class="stat-card" style="border-left-color: var(--teal);">
+        <div class="stat-value" style="color: var(--teal);">224</div>
+        <div class="stat-label">Total references</div>
+        <div class="stat-sub">in master list</div>
+      </div>
+      <div class="stat-card" style="border-left-color: var(--blue);">
+        <div class="stat-value" style="color: var(--blue);">151</div>
+        <div class="stat-label">Scored</div>
+        <div class="stat-sub">73 pending</div>
+      </div>
+      <div class="stat-card" style="border-left-color: var(--purple);">
+        <div class="stat-value" style="color: var(--purple);">91</div>
+        <div class="stat-label">Peer reviewed</div>
+        <div class="stat-sub">41% of total</div>
+      </div>
+      <div class="stat-card" style="border-left-color: var(--amber);">
+        <div class="stat-value" style="color: var(--amber);">151</div>
+        <div class="stat-label">With keywords</div>
+        <div class="stat-sub">67% tagged</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Research areas</div>
+      <div class="section-sub">Distribution of references across 7 thematic categories</div>
+      <div class="chart-grid chart-grid-2">
+        <div class="card">
+          <div class="chart-wrap"><canvas id="chartResearchArea" height="260"></canvas></div>
+        </div>
+        <div class="card">
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:8px;font-weight:300;">Literature type breakdown</div>
+          <div class="chart-wrap"><canvas id="chartLitType" height="220"></canvas></div>
+          <div class="legend" id="litTypeLegend"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Publication timeline</div>
+      <div class="section-sub">References by publication year — 2023–2026 accounts for 62% of the dataset</div>
+      <div class="card">
+        <div class="chart-wrap"><canvas id="chartYears" height="180"></canvas></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Most frequent keyword themes</div>
+      <div class="section-sub">Top 14 keywords across all references, extracted from the "Keywords of note" field</div>
+      <div class="card">
+        <div class="kw-grid" id="keywordGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== QUALITY ==================== -->
+  <div id="tab-quality" class="tab-panel" data-title="Quality & Scoring">
+
+    <div class="stats-row">
+      <div class="stat-card" style="border-left-color: var(--blue);">
+        <div class="stat-value" style="color: var(--blue);">151</div>
+        <div class="stat-label">Scored references</div>
+        <div class="stat-sub">of 224 total</div>
+      </div>
+      <div class="stat-card" style="border-left-color: var(--teal);">
+        <div class="stat-value" style="color: var(--teal);">11–21</div>
+        <div class="stat-label">Score range</div>
+        <div class="stat-sub">out of max 21</div>
+      </div>
+      <div class="stat-card" style="border-left-color: var(--purple);">
+        <div class="stat-value" style="color: var(--purple);">33</div>
+        <div class="stat-label">At 100% quality</div>
+        <div class="stat-sub">score = 21/21</div>
+      </div>
+      <div class="stat-card" style="border-left-color: var(--coral);">
+        <div class="stat-value" style="color: var(--coral);">73</div>
+        <div class="stat-label">Unscored</div>
+        <div class="stat-sub">33% of dataset</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Quality score distribution</div>
+      <div class="section-sub">151 scored references — bimodal clustering at 15–16 (partial relevance) and 20–21 (directly relevant)</div>
+      <div class="card">
+        <div class="chart-wrap"><canvas id="chartScores" height="200"></canvas></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Focus area relevance</div>
+      <div class="section-sub">How closely each reference relates to the core study topic</div>
+      <div class="card">
+        <div class="chart-wrap"><canvas id="chartFocus" height="160"></canvas></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Scoring completeness</div>
+      <div class="section-sub">Proportion of fields populated across the dataset</div>
+      <div class="card" id="completenessCard"></div>
+    </div>
+  </div>
+
+  <!-- ==================== GEOGRAPHY ==================== -->
+  <div id="tab-geography" class="tab-panel" data-title="Geography">
+
+    <div class="section">
+      <div class="section-title">Geographic distribution</div>
+      <div class="section-sub">151 references with geographic data — global studies dominate, with strong Asia/Middle East representation</div>
+      <div class="chart-grid chart-grid-2">
+        <div class="card">
+          <div class="chart-wrap"><canvas id="chartGeo" height="220"></canvas></div>
+        </div>
+        <div class="card">
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:8px;">Key observations</div>
+          <div style="font-size:12.5px;color:var(--text-secondary);line-height:1.7;font-weight:300;">
+            44% of references are global/multi-region studies. Asia/Middle East accounts for 30% — reflecting where most primary mangrove-plastics research has been conducted. Africa (10%), Europe (6%), and the Americas (5%) are underrepresented relative to their mangrove extent. Pacific/Oceania has just 3 references despite significant mangrove coverage.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Research area × geographic region</div>
+      <div class="section-sub">Cross-tabulation showing where research effort concentrates and where gaps exist</div>
+      <div class="card" style="overflow-x:auto;">
+        <table class="heatmap-table" id="heatmapTable"></table>
+        <div style="font-size:12px;color:var(--text-tertiary);margin-top:14px;font-weight:300;">
+          Darker cells = higher concentration. The strongest cluster is plastic pollution research in Asia/Middle East (22 refs). Policy and governance research is predominantly global-level. Notable gaps: transboundary research outside the global level, mitigation studies in Africa, Americas, and Pacific.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== GAPS ==================== -->
+  <div id="tab-gaps" class="tab-panel" data-title="Gaps & Flags">
+
+    <div class="section">
+      <div class="section-title">Data completeness flags</div>
+      <div class="section-sub">Issues to resolve before finalising the PRISMA-ScR flow diagram</div>
+      <div id="gapFlags"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Geographic coverage gaps</div>
+      <div class="section-sub">Regions with mangrove ecosystems but limited representation in the dataset</div>
+      <div class="gap-card-grid" id="geoGaps"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Thematic gaps</div>
+      <div class="section-sub">Research areas that may need additional sourcing</div>
+      <div id="themeGaps"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Next steps checklist</div>
+      <div class="card">
+        <div class="checklist" id="checklist"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    Literature review dashboard · Plastic pollution in mangrove ecosystems · Generated 21 May 2026
+  </footer>
+</div>
+
+<script>
+// ── Tab switching ──
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.textContent.toLowerCase().replace(/[^a-z]/g,'').includes(id.replace(/[^a-z]/g,''))) b.classList.add('active');
+  });
+}
+// Fix tab switching to use data attribute
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const tabMap = {'overview':'overview','quality':'quality','geography':'geography','gaps':'gaps'};
+    const text = this.textContent.toLowerCase().trim();
+    let target = 'overview';
+    if (text.includes('quality')) target = 'quality';
+    else if (text.includes('geography')) target = 'geography';
+    else if (text.includes('gaps')) target = 'gaps';
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + target).classList.add('active');
+    this.classList.add('active');
+  });
+});
+
+// ── Chart.js defaults ──
+const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+Chart.defaults.font.family = "'Outfit', system-ui, sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.font.weight = 300;
+Chart.defaults.color = isDark ? '#B0AEA6' : '#5E5C56';
+Chart.defaults.plugins.legend.display = false;
+Chart.defaults.plugins.tooltip.backgroundColor = isDark ? '#333' : '#fff';
+Chart.defaults.plugins.tooltip.titleColor = isDark ? '#E8E6E0' : '#1A1A18';
+Chart.defaults.plugins.tooltip.bodyColor = isDark ? '#B0AEA6' : '#5E5C56';
+Chart.defaults.plugins.tooltip.borderColor = isDark ? '#3A3A36' : '#D8D5CE';
+Chart.defaults.plugins.tooltip.borderWidth = 1;
+Chart.defaults.plugins.tooltip.cornerRadius = 8;
+Chart.defaults.plugins.tooltip.padding = 10;
+Chart.defaults.scale.grid = { color: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)', drawBorder: false };
+
+const COLORS = ['#1B7A5A','#2E5FA1','#8B6914','#5C3DAF','#C05530','#993556','#3B8BD4','#888780'];
+
+// ── Research Area Bar Chart ──
+new Chart(document.getElementById('chartResearchArea'), {
+  type: 'bar',
+  data: {
+    labels: ['Plastic pollution in mangroves','Policy & governance','Microplastics, additives & POPs','Ecosystem services & linkages','Impact assessment','Mitigation & clean-up','Transboundary riverine pollution'],
+    datasets: [{
+      data: [37,25,24,23,18,13,12],
+      backgroundColor: COLORS,
+      borderRadius: 4,
+      barThickness: 20,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: { ticks: { stepSize: 10 }, border: { display: false } },
+      y: { ticks: { font: { size: 11.5 } }, border: { display: false } }
+    },
+    plugins: { tooltip: { callbacks: { label: ctx => ctx.raw + ' references' } } }
+  }
+});
+
+// ── Literature Type Donut ──
+const litLabels = ['Peer reviewed academic','Grey literature','Newsletters / conferences','Policy & legal','Intergovernmental','Other'];
+const litValues = [91,35,10,8,7,2];
+new Chart(document.getElementById('chartLitType'), {
+  type: 'doughnut',
+  data: {
+    labels: litLabels,
+    datasets: [{ data: litValues, backgroundColor: COLORS, borderWidth: 0, hoverOffset: 6 }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '55%',
+    plugins: { tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw } } }
+  }
+});
+// Build legend
+const legendEl = document.getElementById('litTypeLegend');
+litLabels.forEach((l, i) => {
+  legendEl.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${COLORS[i]}"></div>${l} (${litValues[i]})</div>`;
+});
+
+// ── Year Bar Chart ──
+new Chart(document.getElementById('chartYears'), {
+  type: 'bar',
+  data: {
+    labels: ['≤2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'],
+    datasets: [{
+      data: [8,2,1,5,7,9,8,9,25,27,28,16],
+      backgroundColor: '#1B7A5A',
+      borderRadius: 4,
+      barThickness: 28,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: { border: { display: false } },
+      y: { ticks: { stepSize: 10 }, border: { display: false } }
+    },
+    plugins: { tooltip: { callbacks: { label: ctx => ctx.raw + ' references' } } }
+  }
+});
+
+// ── Keywords ──
+const keywords = [
+  {k:'Social impacts',v:62},{k:'Mangrove ecosystem services',v:51},{k:'Biodiversity',v:48},{k:'Assessment methodology',v:46},
+  {k:'POPs human health effects',v:41},{k:'Coastal debris pathways',v:39},{k:'Integrated coastal governance',v:36},{k:'Chemicals governance',v:35},
+  {k:'Mangrove debris accumulation',v:35},{k:'Plastic debris / microplastic',v:32},{k:'Land-based plastic leakage',v:31},{k:'Bioaccumulation',v:31},
+  {k:'Multilateral agreements',v:31},{k:'Marine litter governance',v:30}
+];
+const kwGrid = document.getElementById('keywordGrid');
+keywords.forEach(kw => {
+  kwGrid.innerHTML += `<div class="kw-row"><div class="kw-label">${kw.k}</div><div class="kw-bar-track"><div class="kw-bar-fill" style="width:${(kw.v/62*100).toFixed(0)}%"></div></div><div class="kw-count">${kw.v}</div></div>`;
+});
+
+// ── Score Distribution ──
+new Chart(document.getElementById('chartScores'), {
+  type: 'bar',
+  data: {
+    labels: ['11 (52%)','13 (62%)','14 (67%)','15 (71%)','16 (76%)','19 (90%)','20 (95%)','21 (100%)'],
+    datasets: [{
+      data: [1,3,6,39,55,3,11,33],
+      backgroundColor: '#2E5FA1',
+      borderRadius: 4,
+      barThickness: 32,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: { border: { display: false }, title: { display: true, text: 'Score (percentage)', font: { size: 11, weight: 300 }, color: isDark ? '#7A7872' : '#908E88' } },
+      y: { ticks: { stepSize: 20 }, border: { display: false } }
+    },
+    plugins: { tooltip: { callbacks: { label: ctx => ctx.raw + ' references' } } }
+  }
+});
+
+// ── Focus Area ──
+new Chart(document.getElementById('chartFocus'), {
+  type: 'bar',
+  data: {
+    labels: ['Plastics/POPs adjacent ecosystems','POPs/plastics in mangroves','Specific to mangroves','Unclassified'],
+    datasets: [{
+      data: [69,47,36,2],
+      backgroundColor: ['#2E5FA1','#1B7A5A','#8B6914','#888780'],
+      borderRadius: 4,
+      barThickness: 22,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: { ticks: { stepSize: 20 }, border: { display: false } },
+      y: { ticks: { font: { size: 11.5 } }, border: { display: false } }
+    },
+    plugins: { tooltip: { callbacks: { label: ctx => ctx.raw + ' references' } } }
+  }
+});
+
+// ── Completeness ──
+const completeness = [
+  {f:'Research area',n:152,t:224},{f:'Focus area',n:153,t:224},{f:'Type of literature',n:153,t:224},
+  {f:'Geographic area',n:151,t:224},{f:'Keywords of note',n:151,t:224},{f:'Score total',n:151,t:224},
+  {f:'Included / Excluded',n:1,t:224},{f:'Chapter assignment',n:0,t:224}
+];
+const compCard = document.getElementById('completenessCard');
+completeness.forEach(c => {
+  const pct = Math.round(c.n/c.t*100);
+  const col = pct > 80 ? 'var(--teal)' : pct > 40 ? 'var(--amber)' : 'var(--coral)';
+  compCard.innerHTML += `<div class="progress-row"><div class="progress-label">${c.f}</div><div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div><div class="progress-value">${c.n} / ${c.t}</div></div>`;
+});
+
+// ── Geographic Bar ──
+new Chart(document.getElementById('chartGeo'), {
+  type: 'bar',
+  data: {
+    labels: ['Global','Asia / Middle East','Africa','Europe','Americas','Pacific / Oceania','Not noted'],
+    datasets: [{
+      data: [66,46,15,9,8,3,4],
+      backgroundColor: '#2E5FA1',
+      borderRadius: 4,
+      barThickness: 20,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: { ticks: { stepSize: 20 }, border: { display: false } },
+      y: { ticks: { font: { size: 12 } }, border: { display: false } }
+    },
+    plugins: { tooltip: { callbacks: { label: ctx => ctx.raw + ' references' } } }
+  }
+});
+
+// ── Heatmap ──
+const heatData = {
+  'Plastic pollution': {Global:9,'Asia / ME':22,Africa:3,Europe:0,Americas:3},
+  'Policy & governance': {Global:15,'Asia / ME':3,Africa:5,Europe:0,Americas:0},
+  'Microplastics & POPs': {Global:11,'Asia / ME':6,Africa:0,Europe:5,Americas:0},
+  'Ecosystem services': {Global:12,'Asia / ME':5,Africa:3,Europe:0,Americas:0},
+  'Impact assessment': {Global:8,'Asia / ME':4,Africa:0,Europe:0,Americas:0},
+  'Mitigation': {Global:4,'Asia / ME':5,Africa:2,Europe:0,Americas:0},
+  'Transboundary': {Global:7,'Asia / ME':0,Africa:0,Europe:0,Americas:0}
+};
+const regions = ['Global','Asia / ME','Africa','Europe','Americas'];
+const hmTable = document.getElementById('heatmapTable');
+let hmHtml = '<thead><tr><th></th>';
+regions.forEach(r => hmHtml += `<th>${r}</th>`);
+hmHtml += '</tr></thead><tbody>';
+const maxHeat = 22;
+Object.entries(heatData).forEach(([area, vals]) => {
+  hmHtml += `<tr><td>${area}</td>`;
+  regions.forEach(r => {
+    const v = vals[r] || 0;
+    const intensity = v / maxHeat;
+    let bg, tc;
+    if (v === 0) {
+      bg = 'transparent'; tc = isDark ? '#7A7872' : '#908E88';
+    } else {
+      const alpha = 0.12 + intensity * 0.75;
+      bg = `rgba(27,122,90,${alpha})`;
+      tc = intensity > 0.45 ? '#fff' : (isDark ? '#E8E6E0' : '#1A1A18');
+    }
+    hmHtml += `<td><span class="heat-cell" style="background:${bg};color:${tc};font-weight:${v>10?500:400}">${v||'–'}</span></td>`;
+  });
+  hmHtml += '</tr>';
+});
+hmHtml += '</tbody>';
+hmTable.innerHTML = hmHtml;
+
+// ── Gap Flags ──
+const flags = [
+  '73 references (33%) have no quality score — these need scoring before inclusion/exclusion decisions',
+  'Only 1 reference marked as Included, 0 as Excluded — classification not yet done',
+  'No chapter assignments completed — all 224 references unassigned',
+  'Quality Score Colour column is empty for all records',
+  '2 records have malformed Research Area values (long text fragments instead of category names)',
+  '1 record has Type of Literature set to a URL instead of a category'
+];
+const flagsEl = document.getElementById('gapFlags');
+flags.forEach(f => {
+  flagsEl.innerHTML += `<div class="gap-flag"><div class="gap-flag-label">Gap</div><div>${f}</div></div>`;
+});
+
+// ── Geo Gaps ──
+const geoGaps = [
+  {r:'Pacific / Oceania',v:'3 refs',n:'Papua New Guinea, Fiji, Solomon Islands have extensive mangroves but almost no plastic pollution research in dataset'},
+  {r:'Americas',v:'8 refs',n:'Brazil, Mexico, Caribbean — significant mangrove coverage but underrepresented relative to Asia'},
+  {r:'West Africa',v:'~5 refs',n:'Nigeria, Cameroon, Senegal mangroves poorly covered; most Africa refs focus on East Africa'},
+  {r:'Middle East',v:'? refs',n:'Grouped with Asia — unclear how many refs specifically cover Gulf/Red Sea mangroves'}
+];
+const geoGapsEl = document.getElementById('geoGaps');
+geoGaps.forEach(g => {
+  geoGapsEl.innerHTML += `<div class="gap-card"><div class="gap-card-region">${g.r}</div><div class="gap-card-value">${g.v}</div><div class="gap-card-note">${g.n}</div></div>`;
+});
+
+// ── Theme Gaps ──
+const themeGaps = [
+  {t:'Mitigation & clean-up (13 refs)',d:'Smallest thematic category — limited evidence base for policy recommendations on interventions'},
+  {t:'Transboundary riverine pollution (12 refs)',d:'Almost all global-level studies — no region-specific transboundary case studies'},
+  {t:'Nanoplastics in mangroves',d:'Keyword analysis shows no references specifically addressing nanoplastic contamination'},
+  {t:'Community / indigenous perspectives',d:'Social impacts keyword is frequent (62 refs) but unclear how many centre community voices vs. measuring socioeconomic indicators'},
+  {t:'Economic valuation',d:'Ecosystem services well covered (23 refs) but cost-benefit analysis of plastic pollution impacts appears thin'}
+];
+const themeGapsEl = document.getElementById('themeGaps');
+themeGaps.forEach(g => {
+  themeGapsEl.innerHTML += `<div class="theme-gap"><div class="theme-gap-dot"></div><div><div class="theme-gap-title">${g.t}</div><div class="theme-gap-desc">${g.d}</div></div></div>`;
+});
+
+// ── Checklist ──
+const steps = [
+  'Complete quality scoring for remaining 73 references',
+  'Apply inclusion/exclusion criteria across all 224 references',
+  'Fix 3 records with malformed Research Area / Type of Literature values',
+  'Populate Quality Score Colour column based on percentage thresholds',
+  'Assign chapter references for included sources',
+  'Consider additional sourcing for Pacific/Oceania and Americas regions',
+  'Resolve whether Asia and Middle East should be tracked separately',
+  'Populate PRISMA-ScR template with finalised numbers'
+];
+const checklistEl = document.getElementById('checklist');
+steps.forEach(s => {
+  checklistEl.innerHTML += `<label><input type="checkbox">${s}</label>`;
+});
+</script>
+
+</body>
+</html>
