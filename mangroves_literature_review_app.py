@@ -1,0 +1,496 @@
+import streamlit as st
+
+st.set_page_config(
+    page_title="Scoping Review — Plastic Pollution in Mangrove Ecosystems",
+    page_icon="🌿",
+    layout="wide",
+)
+
+# Hide Streamlit default chrome for a cleaner look
+st.markdown(
+    """
+    <style>
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    .block-container {padding-top: 0 !important; padding-bottom: 0 !important; padding-left: 0 !important; padding-right: 0 !important; max-width: 100% !important;}
+    iframe {border: none !important;}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+HTML = r"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scoping Review Findings — Plastic Pollution in Mangrove Ecosystems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:40px 24px 80px}
+
+/* Header */
+.hdr{margin-bottom:44px;padding-bottom:28px;border-bottom:1px solid #D8D5CE}
+.hdr-ey{font-size:11px;text-transform:uppercase;letter-spacing:2.5px;color:#1B7A5A;font-weight:600;margin-bottom:8px}
+.hdr h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(24px,4vw,34px);font-weight:600;line-height:1.2;margin-bottom:8px;color:#1A1A18}
+.hdr-meta{font-size:14px;color:#5E5C56;font-weight:300}
+.hdr-meta .sep{color:#D8D5CE;margin:0 4px}
+
+/* Tabs */
+.tabs{display:flex;gap:0;margin-bottom:32px;border-bottom:1px solid #D8D5CE;overflow-x:auto}
+.tab{font-family:'Outfit',system-ui,sans-serif;font-size:14px;font-weight:400;color:#908E88;background:none;border:none;padding:10px 20px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color .2s,border-color .2s}
+.tab:hover{color:#5E5C56}.tab.on{color:#1B7A5A;font-weight:500;border-bottom-color:#1B7A5A}
+.pnl{display:none;animation:fi .3s ease}.pnl.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* Stat cards */
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:36px}
+.sc{background:#fff;border-radius:10px;padding:20px 22px;border-left:4px solid #1B7A5A;box-shadow:0 1px 3px rgba(0,0,0,0.04),0 4px 12px rgba(0,0,0,0.03)}
+.sc .v{font-family:'Source Serif 4',Georgia,serif;font-size:32px;font-weight:600;line-height:1}
+.sc .l{font-size:13px;font-weight:500;color:#1A1A18;margin-top:6px}
+.sc .s{font-size:11px;color:#908E88;margin-top:2px;font-weight:300}
+
+/* Section */
+.sec{margin-bottom:40px}
+.sec-t{font-family:'Source Serif 4',Georgia,serif;font-size:17px;font-weight:600;color:#1A1A18;margin-bottom:4px}
+.sec-s{font-size:12.5px;color:#908E88;margin-bottom:18px;font-weight:300;max-width:720px}
+.card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.04),0 4px 12px rgba(0,0,0,0.03)}
+
+/* Grids */
+.g2{display:grid;gap:20px;grid-template-columns:1.2fr .8fr}
+.g2eq{display:grid;gap:20px;grid-template-columns:1fr 1fr}
+.g3{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3pie{display:grid;gap:20px;grid-template-columns:repeat(3,1fr)}
+@media(max-width:700px){.g2,.g2eq,.g3pie{grid-template-columns:1fr}}
+
+/* Legend */
+.lg{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:10px}
+.lg-i{display:flex;align-items:center;gap:5px;font-size:11px;color:#5E5C56;font-weight:300}
+.lg-d{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+
+/* Heatmap */
+.ht{width:100%;border-collapse:collapse;font-size:12px}
+.ht th{text-align:center;padding:8px 10px;color:#908E88;font-weight:500;border-bottom:1px solid #D8D5CE;font-size:11px}
+.ht th:first-child{text-align:left}.ht td{padding:7px 10px;text-align:center;border-bottom:1px solid #D8D5CE}
+.ht td:first-child{text-align:left;color:#5E5C56;font-weight:400;white-space:nowrap}
+.hc{border-radius:4px;padding:4px 8px;display:inline-block;min-width:28px;font-weight:500}
+
+/* Insight box */
+.ins{font-family:'Source Serif 4',Georgia,serif;font-style:italic;font-size:14px;color:#5E5C56;line-height:1.7;padding:16px 20px;border-left:3px solid #1B7A5A;background:#E1F5EE;border-radius:0 10px 10px 0;margin-bottom:24px}
+
+/* Keywords */
+.kw-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 28px}
+@media(max-width:600px){.kw-grid{grid-template-columns:1fr}}
+.kw-r{display:flex;align-items:center;gap:8px;padding:5px 0}
+.kw-l{flex:1;font-size:12px;color:#5E5C56;font-weight:300}
+.kw-bt{width:90px;height:8px;background:#EDE9E3;border-radius:4px;overflow:hidden;flex-shrink:0}
+.kw-bf{height:100%;background:#1B7A5A;border-radius:4px}
+.kw-c{width:24px;text-align:right;font-size:11px;color:#908E88;flex-shrink:0}
+
+/* Theme finding cards */
+.fc{background:#fff;border-radius:10px;padding:18px 20px;border:1px solid #D8D5CE;box-shadow:0 1px 3px rgba(0,0,0,0.04),0 4px 12px rgba(0,0,0,0.03)}
+.fc-h{font-family:'Source Serif 4',Georgia,serif;font-size:14px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.fc-badge{font-family:'Outfit',system-ui,sans-serif;font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px}
+.fc-body{font-size:12.5px;color:#5E5C56;font-weight:300;line-height:1.65}
+.fc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+.fc-tag{font-size:10.5px;padding:3px 8px;border-radius:4px;font-weight:400}
+.fc-meta{display:flex;gap:16px;margin-top:10px;font-size:11px;color:#908E88;font-weight:300}
+
+/* Progress bars */
+.pr{display:flex;align-items:center;gap:12px;padding:5px 0}
+.pr-l{width:160px;font-size:12px;color:#5E5C56;flex-shrink:0;text-align:right;font-weight:300}
+.pr-t{flex:1;height:10px;background:#EDE9E3;border-radius:5px;overflow:hidden}
+.pr-f{height:100%;border-radius:5px}
+.pr-v{width:36px;font-size:11px;color:#908E88;flex-shrink:0;font-weight:300}
+@media(max-width:600px){.pr-l{width:110px;font-size:11px}}
+
+/* Pie chart label */
+.pie-label{text-align:center;font-size:12px;color:#5E5C56;font-weight:400;margin-top:6px}
+
+.footer{margin-top:48px;padding-top:20px;border-top:1px solid #D8D5CE;font-size:11px;color:#908E88;text-align:center;font-weight:300}
+@media print{.tabs{display:none}.pnl{display:block!important;page-break-inside:avoid;margin-bottom:40px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hdr">
+  <div class="hdr-ey">Scoping review findings</div>
+  <h1>Plastic pollution in mangrove ecosystems: impacts, mitigation actions, and policy responses</h1>
+  <div class="hdr-meta">
+    <span>152 sources reviewed</span><span class="sep">&middot;</span>
+    <span>2002&ndash;2026</span><span class="sep">&middot;</span>
+    <span>7 thematic areas</span><span class="sep">&middot;</span>
+    <span>6 geographic regions</span>
+  </div>
+</header>
+
+<div class="tabs" role="tablist">
+  <button class="tab on" data-t="summary">Summary of evidence</button>
+  <button class="tab" data-t="themes">Thematic findings</button>
+  <button class="tab" data-t="evidence">Evidence landscape</button>
+  <button class="tab" data-t="gaps">Knowledge gaps</button>
+</div>
+
+<!-- ========== SUMMARY ========== -->
+<div id="p-summary" class="pnl on">
+
+  <div class="ins">This scoping review synthesised 152 sources spanning 24 years (2002&ndash;2026) across peer-reviewed literature, grey literature, policy documents, and intergovernmental reports. The evidence base has grown rapidly: 63% of all sources were published from 2023 onward, reflecting the emergence of mangrove plastic pollution as a distinct research field.</div>
+
+  <div class="sg">
+    <div class="sc" style="border-left-color:#1B7A5A"><div class="v" style="color:#1B7A5A">152</div><div class="l">Sources reviewed</div><div class="s">across 7 thematic areas</div></div>
+    <div class="sc" style="border-left-color:#2E5FA1"><div class="v" style="color:#2E5FA1">91</div><div class="l">Peer-reviewed articles</div><div class="s">60% of evidence base</div></div>
+    <div class="sc" style="border-left-color:#5C3DAF"><div class="v" style="color:#5C3DAF">47</div><div class="l">High-quality sources</div><div class="s">scored 90&ndash;100%</div></div>
+    <div class="sc" style="border-left-color:#8B6914"><div class="v" style="color:#8B6914">6</div><div class="l">Regions covered</div><div class="s">Asia/ME most studied</div></div>
+  </div>
+
+  <!-- Summary pie charts -->
+  <div class="sec">
+    <div class="sec-t">Evidence at a glance</div>
+    <div class="sec-s">Three key breakdowns of the 152-source corpus: literature type, geographic spread, and quality banding.</div>
+    <div class="g3pie">
+      <div class="card"><canvas id="pieLitType"></canvas><div class="pie-label">By literature type</div><div class="lg" id="lgLit"></div></div>
+      <div class="card"><canvas id="pieGeo"></canvas><div class="pie-label">By geographic region</div><div class="lg" id="lgGeo"></div></div>
+      <div class="card"><canvas id="pieQuality"></canvas><div class="pie-label">By quality band</div><div class="lg" id="lgQual"></div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t">Evidence by thematic area</div>
+    <div class="sec-s">Volume of evidence varies significantly across research themes. Plastic pollution state assessments have the strongest evidence base; mitigation practices and transboundary dynamics have the least.</div>
+    <div class="card"><canvas id="cArea" height="260"></canvas></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t">Growth of the evidence base</div>
+    <div class="sec-s">Research output has accelerated sharply since 2023, driven by the Global Plastics Treaty negotiations and growing recognition of mangroves as pollutant sinks. Mitigation research is the most recent theme &mdash; 85% published since 2023.</div>
+    <div class="card"><canvas id="cYear" height="190"></canvas></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t">Geographic distribution of evidence</div>
+    <div class="sec-s">Primary field research concentrates in Asia and the Middle East, while policy and governance studies are predominantly global in scope.</div>
+    <div class="g2">
+      <div class="card"><canvas id="cGeo" height="220"></canvas></div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:500;margin-bottom:10px">Regional evidence profile</div>
+        <div style="font-size:12.5px;color:#5E5C56;line-height:1.7;font-weight:300">
+          <strong style="font-weight:500">Asia / Middle East</strong> dominates primary research (30%), particularly on plastic pollution state and microplastics in sediments &mdash; reflecting Southeast Asian fieldwork concentration.<br><br>
+          <strong style="font-weight:500">Global studies</strong> (44%) are mainly policy analyses, intergovernmental reports, and ecosystem reviews &mdash; important for framing but limited in site-specific data.<br><br>
+          <strong style="font-weight:500">Africa</strong> (10%) has emerging evidence, mostly from East Africa. West African mangrove systems are notably underrepresented.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== THEMES ========== -->
+<div id="p-themes" class="pnl">
+  <div class="ins">Each thematic area has a distinct evidence profile. The cards below summarise the key findings, dominant keywords, strength of the evidence base, and geographic concentration for each area.</div>
+  <div class="g3" id="themeCards"></div>
+</div>
+
+<!-- ========== EVIDENCE ========== -->
+<div id="p-evidence" class="pnl">
+  <div class="ins">Assessing the quality and composition of the evidence base is essential for understanding how robust the review's findings are. This section examines literature types, quality scoring, and the intersection of research themes with geographic coverage.</div>
+
+  <div class="sec">
+    <div class="sec-t">Source types across thematic areas</div>
+    <div class="sec-s">Peer-reviewed evidence is strongest in transboundary research (92%) and microplastics (79%), but weakest in policy analysis (24%), which relies heavily on intergovernmental and legal sources.</div>
+    <div class="card"><canvas id="cEvType" height="280"></canvas></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t">Quality score distribution</div>
+    <div class="sec-s">Sources were scored on focus relevance (0&ndash;10), literature type (3&ndash;5), keyword match (0&ndash;3), and geographic specificity (0&ndash;3), giving a maximum of 21. The bimodal distribution reflects two evidence tiers.</div>
+    <div class="g2">
+      <div class="card"><canvas id="cScore" height="220"></canvas></div>
+      <div class="card">
+        <div style="font-size:13px;font-weight:500;margin-bottom:12px">Quality bands</div>
+        <div id="qualBands"></div>
+        <div style="margin-top:16px;font-size:12px;color:#908E88;font-weight:300">31% of sources scored in the highest band. No sources scored below 52%, indicating a well-curated corpus with strong minimum relevance.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t">Research area &times; region heatmap</div>
+    <div class="sec-s">Cross-tabulation revealing where research effort concentrates and where significant gaps remain.</div>
+    <div class="card" style="overflow-x:auto">
+      <table class="ht" id="htable"></table>
+      <div style="font-size:12px;color:#908E88;margin-top:14px;font-weight:300">The strongest evidence cluster is mangrove plastic pollution research in Asia/Middle East (22 sources). Transboundary research is almost exclusively global-level. Mitigation evidence is absent from Europe, the Americas, and the Pacific.</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t">Dominant research keywords</div>
+    <div class="sec-s">The 14 most frequently tagged themes across all sources, reflecting the core conceptual territory of the field.</div>
+    <div class="card"><div class="kw-grid" id="kwGrid"></div></div>
+  </div>
+</div>
+
+<!-- ========== GAPS ========== -->
+<div id="p-gaps" class="pnl">
+  <div class="ins">This section identifies areas where the evidence base is thin, geographically uneven, or methodologically limited. These gaps represent priorities for future research and targeted evidence-gathering before policy recommendations can be made with confidence.</div>
+
+  <div class="sec">
+    <div class="sec-t">Geographic evidence gaps</div>
+    <div class="sec-s">Regions with significant mangrove ecosystems but limited or absent research coverage.</div>
+    <div class="g2eq" id="geoGapCards"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t">Thematic evidence gaps</div>
+    <div class="sec-s">Topics where the current evidence base is insufficient to support robust conclusions.</div>
+    <div id="themeGapList"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t">Evidence recency by theme</div>
+    <div class="sec-s">Proportion of sources published since 2023. Mitigation research is the most recent (85%); microplastics/POPs has the oldest evidence base (50%).</div>
+    <div class="card" id="recencyBars"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t">Recommendations for future research</div>
+    <div class="sec-s">Based on the gaps identified above, the following priorities emerge for strengthening the evidence base.</div>
+    <div class="card" id="recsList" style="font-size:13px;color:#5E5C56;line-height:1.8;font-weight:300"></div>
+  </div>
+</div>
+
+<footer class="footer">Scoping review dashboard &middot; Plastic pollution in mangrove ecosystems &middot; Based on PRISMA-ScR methodology &middot; 152 sources &middot; 2002&ndash;2026</footer>
+</div>
+
+<script>
+// ── Tab switching ──
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('on'));
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+    document.getElementById('p-'+this.dataset.t).classList.add('on');
+    this.classList.add('on');
+  });
+});
+
+// ── Chart defaults (light theme) ──
+Chart.defaults.font.family="'Outfit',system-ui,sans-serif";
+Chart.defaults.font.size=12;
+Chart.defaults.font.weight='300';
+Chart.defaults.color='#5E5C56';
+Chart.defaults.plugins.legend.display=false;
+Chart.defaults.plugins.tooltip.backgroundColor='#fff';
+Chart.defaults.plugins.tooltip.titleColor='#1A1A18';
+Chart.defaults.plugins.tooltip.bodyColor='#5E5C56';
+Chart.defaults.plugins.tooltip.borderColor='#D8D5CE';
+Chart.defaults.plugins.tooltip.borderWidth=1;
+Chart.defaults.plugins.tooltip.cornerRadius=8;
+Chart.defaults.plugins.tooltip.padding=10;
+const gridColor='rgba(0,0,0,0.06)';
+
+const C=['#1B7A5A','#2E5FA1','#8B6914','#5C3DAF','#C05530','#993556','#3B8BD4','#888780'];
+
+// ── Helper: build legend ──
+function buildLegend(el, labels, colors, values){
+  labels.forEach((l,i)=>{
+    el.innerHTML+=`<div class="lg-i"><div class="lg-d" style="background:${colors[i]}"></div>${l} (${values[i]})</div>`;
+  });
+}
+
+// ══════════════ SUMMARY TAB CHARTS ══════════════
+
+// Pie 1: Literature type
+const litLabels=['Peer reviewed','Grey literature','Conferences / other','Policy & legal','Intergovernmental','Other'];
+const litVals=[91,35,10,8,7,1];
+const litColors=['#2E5FA1','#8B6914','#888780','#5C3DAF','#1B7A5A','#D8D5CE'];
+new Chart(document.getElementById('pieLitType'),{
+  type:'doughnut',
+  data:{labels:litLabels,datasets:[{data:litVals,backgroundColor:litColors,borderWidth:2,borderColor:'#fff',hoverOffset:6}]},
+  options:{responsive:true,cutout:'52%',plugins:{tooltip:{callbacks:{label:c=>c.label+': '+c.raw+' ('+Math.round(c.raw/152*100)+'%)'}}}}
+});
+buildLegend(document.getElementById('lgLit'),litLabels,litColors,litVals);
+
+// Pie 2: Geographic region
+const geoLabels=['Global','Asia / Middle East','Africa','Europe','Americas','Pacific / Oceania'];
+const geoVals=[66,46,15,9,8,3];
+const geoColors=['#2E5FA1','#1B7A5A','#C05530','#5C3DAF','#8B6914','#3B8BD4'];
+new Chart(document.getElementById('pieGeo'),{
+  type:'doughnut',
+  data:{labels:geoLabels,datasets:[{data:geoVals,backgroundColor:geoColors,borderWidth:2,borderColor:'#fff',hoverOffset:6}]},
+  options:{responsive:true,cutout:'52%',plugins:{tooltip:{callbacks:{label:c=>c.label+': '+c.raw+' ('+Math.round(c.raw/152*100)+'%)'}}}}
+});
+buildLegend(document.getElementById('lgGeo'),geoLabels,geoColors,geoVals);
+
+// Pie 3: Quality band
+const qualLabels=['High (90\u2013100%)','Medium (70\u201389%)','Low (<70%)'];
+const qualVals=[47,94,10];
+const qualColors=['#1B7A5A','#2E5FA1','#C05530'];
+new Chart(document.getElementById('pieQuality'),{
+  type:'doughnut',
+  data:{labels:qualLabels,datasets:[{data:qualVals,backgroundColor:qualColors,borderWidth:2,borderColor:'#fff',hoverOffset:6}]},
+  options:{responsive:true,cutout:'52%',plugins:{tooltip:{callbacks:{label:c=>c.label+': '+c.raw+' ('+Math.round(c.raw/151*100)+'%)'}}}}
+});
+buildLegend(document.getElementById('lgQual'),qualLabels,qualColors,qualVals);
+
+// Bar: Research area
+new Chart(document.getElementById('cArea'),{
+  type:'bar',
+  data:{labels:['Plastic pollution\nin mangroves','Policy &\ngovernance','Microplastics,\nadditives & POPs','Ecosystem services\n& linkages','Impact\nassessment','Mitigation &\nclean-up','Transboundary\nriverine pollution'],
+    datasets:[{data:[37,25,24,23,18,13,12],backgroundColor:C,borderRadius:4,barThickness:22}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    scales:{x:{ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{ticks:{font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    plugins:{tooltip:{callbacks:{label:c=>c.raw+' sources'}}}}
+});
+
+// Bar: Year
+new Chart(document.getElementById('cYear'),{
+  type:'bar',
+  data:{labels:['\u22642015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'],
+    datasets:[{data:[8,2,1,5,7,9,8,9,25,27,28,16],backgroundColor:'#1B7A5A',borderRadius:4,barThickness:28}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    scales:{x:{border:{display:false},grid:{display:false}},y:{ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}}},
+    plugins:{tooltip:{callbacks:{label:c=>c.raw+' sources'}}}}
+});
+
+// Bar: Geography
+new Chart(document.getElementById('cGeo'),{
+  type:'bar',
+  data:{labels:geoLabels,datasets:[{data:geoVals,backgroundColor:'#2E5FA1',borderRadius:4,barThickness:20}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    scales:{x:{ticks:{stepSize:20},border:{display:false},grid:{color:gridColor}},y:{ticks:{font:{size:12}},border:{display:false},grid:{display:false}}},
+    plugins:{tooltip:{callbacks:{label:c=>c.raw+' sources'}}}}
+});
+
+// ══════════════ THEMES TAB ══════════════
+const themes=[
+{area:'State of plastic pollution in mangroves',n:37,pr:70,rec:68,color:'#1B7A5A',bg:'#E1F5EE',top:'Asia / Middle East (22)',
+  sum:'The largest thematic category, documenting the extent and distribution of plastic waste in mangrove systems. Evidence is concentrated in Southeast Asia, with strong peer-reviewed backing. Key findings centre on mangroves as debris accumulation zones, microplastics in sediments, and land-based leakage pathways.',
+  kw:['Mangrove debris accumulation','Assessment methodology','Coastal debris pathways','Land-based plastic leakage','Biodiversity']},
+{area:'Policy and governance analysis',n:25,pr:24,rec:64,color:'#2E5FA1',bg:'#E6F1FB',top:'Global (15)',
+  sum:'Dominated by intergovernmental and legal sources rather than peer-reviewed literature. Covers multilateral environmental agreements (Stockholm, Basel conventions), chemicals governance frameworks, and national plastic waste policies. Most sources are global-level analyses.',
+  kw:['Multilateral agreements','Chemicals governance','Social impacts','POPs health effects','PBDEs']},
+{area:'Microplastics, chemical additives & POPs',n:24,pr:79,rec:50,color:'#8B6914',bg:'#F5EDD4',top:'Global (11)',
+  sum:'Strongly peer-reviewed evidence base examining bioaccumulation, environmental persistence, and health effects of persistent organic pollutants associated with plastics. European research is notably present (5 sources). Has the oldest evidence profile \u2014 50% published before 2023.',
+  kw:['Bioaccumulation','POPs health effects','Environmental persistence','Fisheries contamination','Biomagnification']},
+{area:'Ecosystem services and linkages',n:23,pr:48,rec:65,color:'#5C3DAF',bg:'#E4DFF5',top:'Global (12)',
+  sum:'Examines how plastic pollution affects the ecosystem services mangroves provide \u2014 coastal protection, carbon sequestration, nursery habitat, and biodiversity. Heavy reliance on grey literature alongside peer-reviewed studies.',
+  kw:['Mangrove ecosystem services','Social impacts','Biodiversity','Vegetation health','Mangrove']},
+{area:'Impact assessment',n:18,pr:65,rec:59,color:'#C05530',bg:'#FAECE7',top:'Global (8)',
+  sum:'Cross-cutting assessments of plastic pollution impacts on coastal ecosystems, including environmental, social, and economic dimensions. Integrates governance and scientific perspectives but lacks site-specific studies outside Asia.',
+  kw:['Social impacts','Plastic debris','Chemicals governance','Bioaccumulation','Integrated governance']},
+{area:'Mitigation and clean-up practices',n:13,pr:54,rec:85,color:'#993556',bg:'#FBEAF0',top:'Asia / ME (5)',
+  sum:'The smallest but most recent thematic category \u2014 85% published since 2023. Covers clean-up methodologies, bioplastic alternatives, circular economy approaches, and community-based interventions. Limited evidence for effectiveness of specific interventions.',
+  kw:['Coastal debris pathways','Integrated governance','Ecosystem services','Coastal livelihoods','Assessment methodology']},
+{area:'Transboundary riverine plastic & chemical pollution',n:12,pr:92,rec:58,color:'#3B8BD4',bg:'#E6F1FB',top:'Global (7)',
+  sum:'The strongest peer-reviewed evidence base (92%) but almost entirely global-level studies. Examines how rivers transport plastic and chemical pollutants to coastal mangrove systems. Lacks regional case studies \u2014 a critical gap.',
+  kw:['Chemicals governance','POPs health effects','Assessment methodology','Biodiversity','Plastic debris']}
+];
+const tcEl=document.getElementById('themeCards');
+themes.forEach(t=>{
+  tcEl.innerHTML+=`<div class="fc">
+    <div class="fc-h"><span style="color:${t.color}">${t.area}</span><span class="fc-badge" style="background:${t.bg};color:${t.color}">${t.n} sources</span></div>
+    <div class="fc-body">${t.sum}</div>
+    <div class="fc-tags">${t.kw.map(k=>`<span class="fc-tag" style="background:${t.bg};color:${t.color}">${k}</span>`).join('')}</div>
+    <div class="fc-meta"><span>${t.pr}% peer-reviewed</span><span>${t.rec}% since 2023</span><span>Top region: ${t.top}</span></div>
+  </div>`;
+});
+
+// ══════════════ EVIDENCE TAB ══════════════
+
+// Stacked bar: Evidence types per area
+const areaShort=['Plastic pollution','Policy','Microplastics','Ecosystem svc.','Impact','Mitigation','Transboundary'];
+new Chart(document.getElementById('cEvType'),{
+  type:'bar',
+  data:{labels:areaShort,datasets:[
+    {label:'Peer reviewed',data:[26,6,19,11,11,7,11],backgroundColor:'#2E5FA1',borderRadius:2,barThickness:22},
+    {label:'Grey literature',data:[8,5,3,7,4,4,1],backgroundColor:'#8B6914',borderRadius:2,barThickness:22},
+    {label:'Policy / intergov.',data:[0,14,0,1,1,0,0],backgroundColor:'#5C3DAF',borderRadius:2,barThickness:22},
+    {label:'Conferences / other',data:[3,0,2,4,2,2,0],backgroundColor:'#888780',borderRadius:2,barThickness:22}
+  ]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    scales:{x:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:12,padding:16,font:{size:11,weight:'300'}}},tooltip:{mode:'index',intersect:false}}}
+});
+
+// Score distribution
+new Chart(document.getElementById('cScore'),{
+  type:'bar',
+  data:{labels:['11 (52%)','13 (62%)','14 (67%)','15 (71%)','16 (76%)','19 (90%)','20 (95%)','21 (100%)'],
+    datasets:[{data:[1,3,6,39,55,3,11,33],backgroundColor:['#C05530','#C05530','#C05530','#2E5FA1','#2E5FA1','#1B7A5A','#1B7A5A','#1B7A5A'],borderRadius:4,barThickness:30}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    scales:{x:{border:{display:false},grid:{display:false},title:{display:true,text:'Score (percentage)',font:{size:11,weight:'300'},color:'#908E88'}},y:{ticks:{stepSize:20},border:{display:false},grid:{color:gridColor}}},
+    plugins:{tooltip:{callbacks:{label:c=>c.raw+' sources'}}}}
+});
+
+// Quality bands
+const qb=document.getElementById('qualBands');
+[{l:'High (90\u2013100%)',n:47,c:'#1B7A5A',bg:'#E1F5EE'},{l:'Medium (70\u201389%)',n:94,c:'#2E5FA1',bg:'#E6F1FB'},{l:'Low (<70%)',n:10,c:'#C05530',bg:'#FAECE7'}].forEach(b=>{
+  qb.innerHTML+=`<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:${b.bg};border-radius:8px;margin-bottom:6px">
+    <div style="font-size:22px;font-weight:600;color:${b.c};min-width:36px;font-family:'Source Serif 4',Georgia,serif">${b.n}</div>
+    <div><div style="font-size:12px;font-weight:500;color:#1A1A18">${b.l}</div><div style="font-size:11px;color:#908E88;font-weight:300">${Math.round(b.n/151*100)}% of corpus</div></div></div>`;
+});
+
+// Heatmap
+const hd={'Plastic pollution':{Global:9,'Asia / ME':22,Africa:3,Europe:0,Americas:3,Pacific:0},'Policy & governance':{Global:15,'Asia / ME':3,Africa:5,Europe:0,Americas:0,Pacific:0},'Microplastics & POPs':{Global:11,'Asia / ME':6,Africa:0,Europe:5,Americas:0,Pacific:0},'Ecosystem services':{Global:12,'Asia / ME':5,Africa:3,Europe:0,Americas:0,Pacific:0},'Impact assessment':{Global:8,'Asia / ME':4,Africa:0,Europe:0,Americas:0,Pacific:0},'Mitigation':{Global:4,'Asia / ME':5,Africa:2,Europe:0,Americas:0,Pacific:0},'Transboundary':{Global:7,'Asia / ME':1,Africa:1,Europe:0,Americas:0,Pacific:0}};
+const regs=['Global','Asia / ME','Africa','Europe','Americas','Pacific'];
+let hh='<thead><tr><th></th>';regs.forEach(r=>hh+=`<th>${r}</th>`);hh+='</tr></thead><tbody>';
+Object.entries(hd).forEach(([a,vs])=>{hh+=`<tr><td>${a}</td>`;regs.forEach(r=>{const v=vs[r]||0;const i=v/22;let bg,tc;if(!v){bg='transparent';tc='#908E88'}else{bg=`rgba(27,122,90,${.12+i*.75})`;tc=i>.45?'#fff':'#1A1A18'}hh+=`<td><span class="hc" style="background:${bg};color:${tc};font-weight:${v>10?500:400}">${v||'\u2013'}</span></td>`});hh+='</tr>'});
+hh+='</tbody>';document.getElementById('htable').innerHTML=hh;
+
+// Keywords
+const kws=[{k:'Social impacts',v:62},{k:'Mangrove ecosystem services',v:51},{k:'Biodiversity',v:48},{k:'Assessment methodology',v:46},{k:'POPs human health effects',v:41},{k:'Coastal debris pathways',v:39},{k:'Integrated coastal governance',v:36},{k:'Chemicals governance',v:35},{k:'Mangrove debris accumulation',v:35},{k:'Plastic debris / microplastic',v:32},{k:'Land-based plastic leakage',v:31},{k:'Bioaccumulation',v:31},{k:'Multilateral agreements',v:31},{k:'Marine litter governance',v:30}];
+const kwG=document.getElementById('kwGrid');
+kws.forEach(kw=>{kwG.innerHTML+=`<div class="kw-r"><div class="kw-l">${kw.k}</div><div class="kw-bt"><div class="kw-bf" style="width:${(kw.v/62*100).toFixed(0)}%"></div></div><div class="kw-c">${kw.v}</div></div>`});
+
+// ══════════════ GAPS TAB ══════════════
+
+// Geo gaps
+const ggs=[
+  {r:'Pacific / Oceania',v:'3',n:'Papua New Guinea, Fiji, and Solomon Islands have extensive mangrove systems but are nearly absent from the evidence base. No field studies on plastic pollution in Pacific mangroves were identified.'},
+  {r:'Americas',v:'8',n:'Brazil has the second-largest mangrove area globally, yet only 8 sources cover the Americas. Caribbean island states, facing acute waste management challenges, are particularly underrepresented.'},
+  {r:'West Africa',v:'~3',n:'Nigeria and Cameroon contain significant mangrove forests. Most African evidence focuses on East Africa; West African mangrove-plastic interactions are essentially unstudied.'},
+  {r:'Middle East',v:'unclear',n:'Grouped with Asia in the dataset. Gulf and Red Sea mangrove systems face distinct pollution pressures from petrochemical industries but cannot be disaggregated.'}
+];
+const ggEl=document.getElementById('geoGapCards');
+ggs.forEach(g=>{ggEl.innerHTML+=`<div class="fc"><div style="font-size:13px;font-weight:500">${g.r}</div><div style="font-family:'Source Serif 4',Georgia,serif;font-size:24px;font-weight:600;color:#C05530;margin:2px 0">${g.v} sources</div><div style="font-size:11.5px;color:#908E88;line-height:1.5;font-weight:300">${g.n}</div></div>`});
+
+// Theme gaps
+const tgs=[
+  {t:'Mitigation effectiveness evidence',d:'13 sources describe interventions but few evaluate outcomes. Cost-effectiveness data and longitudinal impact assessments are absent.'},
+  {t:'Transboundary corridor case studies',d:'All 12 transboundary sources are global-level. No studies examine specific river-to-mangrove corridors (e.g. Mekong, Niger, Ganges deltas).'},
+  {t:'Nanoplastics in mangrove systems',d:'No sources specifically address nanoplastic contamination in mangroves, despite growing evidence of nanoplastic presence in marine environments.'},
+  {t:'Economic valuation of pollution impacts',d:'Ecosystem services are well documented (23 sources) but economic quantification of damage \u2014 costs to fisheries, tourism, coastal protection \u2014 is largely absent.'},
+  {t:'Community and indigenous knowledge',d:'Social impacts are frequently tagged (62 sources) but most measure socioeconomic indicators rather than incorporating local or indigenous perspectives.'},
+  {t:'Microplastic-POPs interaction pathways',d:'Microplastics and POPs are studied separately but the mechanism by which plastics act as vectors for POPs in mangrove food webs has limited dedicated research.'}
+];
+const tgEl=document.getElementById('themeGapList');
+tgs.forEach(g=>{tgEl.innerHTML+=`<div style="display:flex;gap:12px;align-items:flex-start;background:#fff;border-radius:10px;padding:12px 16px;border:1px solid #D8D5CE;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,0.04)"><div style="width:6px;height:6px;border-radius:50%;background:#C05530;margin-top:6px;flex-shrink:0"></div><div><div style="font-size:12.5px;font-weight:500">${g.t}</div><div style="font-size:11.5px;color:#908E88;margin-top:2px;font-weight:300">${g.d}</div></div></div>`});
+
+// Recency bars
+const rbEl=document.getElementById('recencyBars');
+[{a:'Mitigation & clean-up',p:85,c:'#1B7A5A'},{a:'Plastic pollution in mangroves',p:68,c:'#1B7A5A'},{a:'Ecosystem services',p:65,c:'#2E5FA1'},{a:'Policy & governance',p:64,c:'#2E5FA1'},{a:'Impact assessment',p:59,c:'#8B6914'},{a:'Transboundary riverine',p:58,c:'#8B6914'},{a:'Microplastics & POPs',p:50,c:'#C05530'}].forEach(r=>{
+  rbEl.innerHTML+=`<div class="pr"><div class="pr-l">${r.a}</div><div class="pr-t"><div class="pr-f" style="width:${r.p}%;background:${r.c}"></div></div><div class="pr-v">${r.p}%</div></div>`;
+});
+
+// Recommendations
+const recs=[
+  'Prioritise field studies in the Pacific Islands, West Africa, and the Americas to address the geographic imbalance in the evidence base.',
+  'Commission transboundary case studies on specific river-to-mangrove corridors (Mekong, Niger, Ganges) to complement existing global-level analyses.',
+  'Fund longitudinal studies evaluating the effectiveness of mangrove clean-up and mitigation interventions, including cost-benefit analyses.',
+  'Investigate nanoplastic contamination in mangrove sediments and biota as an emerging pollutant class.',
+  'Integrate community and indigenous knowledge into impact assessments, moving beyond quantitative socioeconomic indicators.',
+  'Support research on plastics as vectors for POPs transport in mangrove food webs, bridging the current siloed treatment of these pollutant classes.',
+  'Disaggregate Middle East mangrove research from the broader Asia category to capture petrochemical-specific pollution dynamics.',
+  'Establish standardised assessment methodologies for plastic pollution in mangroves to enable cross-site and cross-regional comparisons.'
+];
+const rcEl=document.getElementById('recsList');
+recs.forEach((r,i)=>{rcEl.innerHTML+=`<div style="display:flex;gap:10px;padding:6px 0;${i<recs.length-1?'border-bottom:1px solid #EDE9E3':''}"><span style="color:#1B7A5A;font-weight:500;flex-shrink:0">${i+1}.</span>${r}</div>`});
+</script>
+</body>
+</html>"""
+
+st.components.v1.html(HTML, height=2400, scrolling=True)
