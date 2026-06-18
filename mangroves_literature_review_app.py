@@ -219,13 +219,13 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
 
   <div class="sec">
     <div class="sec-t">Quality score distribution</div>
-    <div class="sec-s">Sources were scored on focus relevance (0&ndash;10), literature type (3&ndash;5), keyword match (0&ndash;3), and geographic specificity (0&ndash;3), giving a maximum of 21. The bimodal distribution reflects two evidence tiers.</div>
+    <div class="sec-s">Sources were scored on focus relevance (0&ndash;10), literature type (3&ndash;5), keyword match (0&ndash;3), and geographic specificity (0&ndash;3), giving a maximum of 21.</div>
     <div class="g2">
       <div class="card"><canvas id="cScore" height="220"></canvas></div>
       <div class="card">
         <div style="font-size:13px;font-weight:500;margin-bottom:12px">Quality bands</div>
         <div id="qualBands"></div>
-        <div style="margin-top:16px;font-size:12px;color:#908E88;font-weight:300">38% of scored sources fell in the highest band. No sources scored below 52%, indicating a well-curated corpus with strong minimum relevance.</div>
+        <div style="margin-top:16px;font-size:12px;color:#908E88;font-weight:300">95% of scored sources fell in the high band (>70%); no sources scored below 52%, indicating a well-curated corpus with strong minimum relevance. 5 sources awaiting scoring are not shown.</div>
       </div>
     </div>
   </div>
@@ -338,9 +338,9 @@ new Chart(document.getElementById('pieGeo'),{
 buildLegend(document.getElementById('lgGeo'),geoLabels,geoColors,geoVals);
 
 // Pie 3: Quality band
-const qualLabels=['High (90\u2013100%)','Medium (70\u201389%)','Low (<70%)'];
-const qualVals=[79,119,10];
-const qualColors=['#1B7A5A','#2E5FA1','#C05530'];
+const qualLabels=['High (>70%)','Medium (>40\u2013\u226470%)','Low (\u226440%)'];
+const qualVals=[198,10,0];
+const qualColors=['#1B7A5A','#E89030','#D63B26'];
 new Chart(document.getElementById('pieQuality'),{
   type:'doughnut',
   data:{labels:qualLabels,datasets:[{data:qualVals,backgroundColor:qualColors,borderWidth:2,borderColor:'#fff',hoverOffset:6}]},
@@ -431,16 +431,16 @@ new Chart(document.getElementById('cEvType'),{
 // Score distribution
 new Chart(document.getElementById('cScore'),{
   type:'bar',
-  data:{labels:['11 (52%)','13 (62%)','14 (67%)','15 (71%)','16 (76%)','19 (90%)','20 (95%)','21 (100%)'],
-    datasets:[{data:[1,3,6,48,71,3,12,64],backgroundColor:['#C05530','#C05530','#C05530','#2E5FA1','#2E5FA1','#1B7A5A','#1B7A5A','#1B7A5A'],borderRadius:4,barThickness:30}]},
+  data:{labels:['52','62','67','71','76','90','95','100'],
+    datasets:[{data:[1,3,6,48,71,3,12,64],backgroundColor:['#E89030','#E89030','#E89030','#1B7A5A','#1B7A5A','#1B7A5A','#1B7A5A','#1B7A5A'],borderRadius:4,barThickness:30}]},
   options:{responsive:true,maintainAspectRatio:false,
-    scales:{x:{border:{display:false},grid:{display:false},title:{display:true,text:'Score (percentage)',font:{size:11,weight:'300'},color:'#908E88'}},y:{ticks:{stepSize:20},border:{display:false},grid:{color:gridColor}}},
+    scales:{x:{border:{display:false},grid:{display:false},title:{display:true,text:'Quality score (%)',font:{size:11,weight:'300'},color:'#908E88'}},y:{title:{display:true,text:'Number of sources',font:{size:11,weight:'300'},color:'#908E88'},ticks:{stepSize:20},border:{display:false},grid:{color:gridColor}}},
     plugins:{tooltip:{callbacks:{label:c=>c.raw+' sources'}}}}
 });
 
 // Quality bands
 const qb=document.getElementById('qualBands');
-[{l:'High (90\u2013100%)',n:79,c:'#1B7A5A',bg:'#E1F5EE'},{l:'Medium (70\u201389%)',n:119,c:'#2E5FA1',bg:'#E6F1FB'},{l:'Low (<70%)',n:10,c:'#C05530',bg:'#FAECE7'}].forEach(b=>{
+[{l:'High (>70%)',n:198,c:'#1B7A5A',bg:'#E1F5EE'},{l:'Medium (>40\u2013\u226470%)',n:10,c:'#E89030',bg:'#FAEEDA'},{l:'Low (\u226440%)',n:0,c:'#D63B26',bg:'#FBE7E1'}].forEach(b=>{
   qb.innerHTML+=`<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:${b.bg};border-radius:8px;margin-bottom:6px">
     <div style="font-size:22px;font-weight:600;color:${b.c};min-width:36px;font-family:'Source Serif 4',Georgia,serif">${b.n}</div>
     <div><div style="font-size:12px;font-weight:500;color:#1A1A18">${b.l}</div><div style="font-size:11px;color:#908E88;font-weight:300">${Math.round(b.n/208*100)}% of corpus</div></div></div>`;
