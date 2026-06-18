@@ -20,9 +20,21 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
 .hdr-meta .sep{color:#D8D5CE;margin:0 4px}
 
 /* Tabs */
-.tabs{display:flex;gap:0;margin-bottom:32px;border-bottom:1px solid #D8D5CE;overflow-x:auto}
-.tab{font-family:'Outfit',system-ui,sans-serif;font-size:14px;font-weight:400;color:#908E88;background:none;border:none;padding:10px 20px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color .2s,border-color .2s}
-.tab:hover{color:#5E5C56}.tab.on{color:#1B7A5A;font-weight:500;border-bottom-color:#1B7A5A}
+.tabs{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap}
+.tab{font-family:'Outfit',system-ui,sans-serif;font-size:13.5px;font-weight:500;background:#fff;border:1.5px solid;padding:9px 18px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.tab[data-t="summary"]{color:#1B7A5A;border-color:#1B7A5A}
+.tab[data-t="themes"]{color:#5C3DAF;border-color:#5C3DAF}
+.tab[data-t="evidence"]{color:#2E5FA1;border-color:#2E5FA1}
+.tab[data-t="gaps"]{color:#C05530;border-color:#C05530}
+.tab[data-t="summary"]:hover{background:#E1F5EE}
+.tab[data-t="themes"]:hover{background:#E4DFF5}
+.tab[data-t="evidence"]:hover{background:#E6F1FB}
+.tab[data-t="gaps"]:hover{background:#FAECE7}
+.tab[data-t="summary"].on{background:#1B7A5A;color:#fff}
+.tab[data-t="themes"].on{background:#5C3DAF;color:#fff}
+.tab[data-t="evidence"].on{background:#2E5FA1;color:#fff}
+.tab[data-t="gaps"].on{background:#C05530;color:#fff}
+.tab.on{box-shadow:0 2px 8px rgba(0,0,0,0.12)}
 .pnl{display:none;animation:fi .3s ease}.pnl.on{display:block}
 @keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
@@ -428,7 +440,7 @@ kws.forEach(kw=>{kwG.innerHTML+=`<div class="kw-r"><div class="kw-l">${kw.k}</di
 
 // Geo gaps
 const ggs=[
-  {r:'Pacific / Oceania',v:'6',n:'Papua New Guinea, Fiji, and Solomon Islands have extensive mangrove systems but remain underrepresented in the evidence base. Field studies on plastic pollution in Pacific mangroves are still scarce.'},
+  {r:'Pacific / Oceania',v:'6',n:'Papua New Guinea, Fiji, and Solomon Islands have extensive mangrove systems but are nearly absent from the evidence base. The 6 Pacific-tagged sources cover deep-sea POPs, Fiji microplastics in fish, and NZ mangrove ecology — none specifically study plastic pollution within Pacific mangroves.'},
   {r:'Americas',v:'9',n:'Brazil has the second-largest mangrove area globally, yet only 9 sources cover the Americas. Caribbean island states, facing acute waste management challenges, are particularly underrepresented.'},
   {r:'West Africa',v:'~3',n:'Nigeria and Cameroon contain significant mangrove forests. Most African evidence focuses on East Africa; West African mangrove-plastic interactions are essentially unstudied.'},
   {r:'Middle East',v:'unclear',n:'Grouped with Asia in the dataset. Gulf and Red Sea mangrove systems face distinct pollution pressures from petrochemical industries but cannot be disaggregated.'}
@@ -439,7 +451,7 @@ ggs.forEach(g=>{ggEl.innerHTML+=`<div class="fc"><div style="font-size:13px;font
 // Theme gaps
 const tgs=[
   {t:'Mitigation effectiveness evidence',d:'14 sources describe interventions but few evaluate outcomes. Cost-effectiveness data and longitudinal impact assessments are absent.'},
-  {t:'Transboundary corridor case studies',d:'Of 15 transboundary sources, 10 are global-level. Few studies examine specific river-to-mangrove corridors (e.g. Mekong, Niger, Ganges deltas).'},
+  {t:'Transboundary corridor case studies',d:'Of 15 transboundary sources, only one primary field study (Niger Delta mangrove sediments) and one grey-literature commentary (Sundarbans / Ganges-Brahmaputra-Meghna) examine specific river-to-mangrove corridors. The Mekong, other major Asian deltas, and most South American river systems remain unstudied.'},
   {t:'Nanoplastics in mangrove systems',d:'No sources specifically address nanoplastic contamination in mangroves, despite growing evidence of nanoplastic presence in marine environments.'},
   {t:'Economic valuation of pollution impacts',d:'Ecosystem services are well documented (26 sources) but economic quantification of damage — costs to fisheries, tourism, coastal protection — is largely absent.'},
   {t:'Community and indigenous knowledge',d:'Social impacts are frequently tagged (86 sources) but most measure socioeconomic indicators rather than incorporating local or indigenous perspectives.'},
