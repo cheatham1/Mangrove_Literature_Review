@@ -2,27 +2,6 @@
 
 Interactive dashboard for exploring findings from a scoping review of **plastic pollution in mangrove ecosystems**. It covers **260 sources** published between **1993 and 2026**, spanning peer-reviewed articles, grey literature, policy and legal documents, and intergovernmental reports.
 
-The dashboard is a single self-contained HTML file (charts rendered with Chart.js) and can also be served through a small Streamlit wrapper.
-
-## Contents
-
-| File | Description |
-|------|-------------|
-| `mangrove_literature_review_dashboard.html` | The dashboard — open directly in any modern browser |
-| `mangroves_literature_review_app.py` | Streamlit wrapper that serves the same dashboard |
-| `mangroves_literature_review_data_v5.xlsx` | Source dataset (sheet: `List refs`) |
-
-## Running it
-
-**As a static page** — open `mangrove_literature_review_dashboard.html` in a browser, or host it on GitHub Pages. An internet connection is required so the page can load Chart.js and web fonts from their CDNs; all review data is embedded in the file itself.
-
-**With Streamlit:**
-
-```bash
-pip install streamlit
-streamlit run mangroves_literature_review_app.py
-```
-
 ## Dashboard tabs
 
 - **Summary of evidence** — headline metrics; breakdowns by literature type, geographic region, quality band, and focus specificity (each pie annotated with a short insight); research-area volumes; the publication timeline by theme; and focus specificity over time.
