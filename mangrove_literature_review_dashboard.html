@@ -133,9 +133,9 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
 .st-empty{padding:44px;text-align:center;color:#908E88;font-size:13px}
 @media(max-width:600px){.st .t-title{max-width:190px}}
 @media(max-width:700px){
-.sec:has(> .card):not(:has(> .g2eq)):not(:has(> .g3)):not(:has(> .g3pie)),.sec:has(> .g2){background:#fff;border-radius:14px;padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.04),0 4px 12px rgba(0,0,0,0.03)}
-.sec:has(> .card):not(:has(> .g2eq)):not(:has(> .g3)):not(:has(> .g3pie)) .card,.sec:has(> .g2) .card{background:transparent;box-shadow:none;padding:0;border-radius:0}
-.sec:has(> .g2) .g2{gap:0}
+.sec.mblock{background:#fff;border-radius:14px;padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.04),0 4px 12px rgba(0,0,0,0.03)}
+.sec.mblock .card{background:transparent;box-shadow:none;padding:0;border-radius:0}
+.sec.mblock .g2{gap:0}
 }
 </style>
 </head>
@@ -344,12 +344,22 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
 
 <script>
 // ── Tab switching ──
+document.querySelectorAll('.sec').forEach(function(sec){
+  if(sec.querySelector('.g3pie,.g2eq,.g3')) return;
+  if(sec.querySelector('.card')) sec.classList.add('mblock');
+});
 document.querySelectorAll('.tab').forEach(btn=>{
   btn.addEventListener('click',function(){
+    var t=this.dataset.t;
     document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('on'));
     document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
-    document.getElementById('p-'+this.dataset.t).classList.add('on');
+    document.getElementById('p-'+t).classList.add('on');
     this.classList.add('on');
+    requestAnimationFrame(function(){
+      document.querySelectorAll('#p-'+t+' canvas').forEach(function(cv){
+        var ch=(window.Chart&&Chart.getChart)?Chart.getChart(cv):null; if(ch){ch.resize();}
+      });
+    });
   });
 });
 
@@ -428,7 +438,7 @@ new Chart(document.getElementById('cArea'),{
   data:{labels:[['Plastic pollution','in mangroves'],['Policy &','governance'],['Microplastics,','additives & POPs'],['Ecosystem services','& linkages'],['Impact','assessment'],['Mitigation &','clean-up'],['Transboundary','riverine pollution']],
     datasets:[{data:[70,38,28,32,61,13,18],backgroundColor:C,borderRadius:4,barThickness:22}]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{ticks:{font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
     plugins:{tooltip:{callbacks:{label:c=>c.raw+' sources'}}}}
 });
 
@@ -462,7 +472,7 @@ new Chart(document.getElementById('cFocusTheme'),{
     {label:'Adjacent ecosystems (proxy)',data:[3,29,18,2,46,8,14],backgroundColor:'#C05530',borderRadius:2,barThickness:22}
   ]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
     plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:16,font:{size:11,weight:'300'}}},tooltip:{mode:'index',intersect:false}}}
 });
 
@@ -514,7 +524,7 @@ new Chart(document.getElementById('cEvType'),{
     {label:'Conferences / other',data:[1,0,0,6,1,2,1],backgroundColor:'#888780',borderRadius:2,barThickness:22}
   ]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
     plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:16,font:{size:11,weight:'300'}}},tooltip:{mode:'index',intersect:false}}}
 });
 
@@ -569,7 +579,7 @@ new Chart(document.getElementById('cRegionFocus'),{
     {label:'Adjacent ecosystems (proxy)',data:[81,10,6,7,8,4],backgroundColor:'#C05530',borderRadius:2,barThickness:20}
   ]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{stacked:true,ticks:{stepSize:20},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{font:{size:12}},border:{display:false},grid:{display:false}}},
+    scales:{x:{stacked:true,ticks:{stepSize:20},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{autoSkip:false,font:{size:12}},border:{display:false},grid:{display:false}}},
     plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:16,font:{size:11,weight:'300'}}},tooltip:{mode:'index',intersect:false}}}
 });
 
@@ -625,7 +635,7 @@ new Chart(document.getElementById('cQualTheme'),{
   type:'bar',
   data:{labels:qtData.map(d=>d[0]),datasets:[{data:qtData.map(d=>d[1]),backgroundColor:qtData.map(d=>d[2]),borderRadius:4,barThickness:22}]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{min:0,max:100,ticks:{stepSize:20,callback:v=>v+'%'},border:{display:false},grid:{color:gridColor}},y:{ticks:{font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{min:0,max:100,ticks:{stepSize:20,callback:v=>v+'%'},border:{display:false},grid:{color:gridColor}},y:{ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
     plugins:{tooltip:{callbacks:{label:c=>c.raw+'% mean quality score'}}}}
 });
 
@@ -693,7 +703,7 @@ new Chart(document.getElementById('cQualType'),{
     {label:'Low (≤40%)',data:lqPct['Low (≤40%)'],backgroundColor:'#D63B26',borderRadius:2,barThickness:22}
   ]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{stacked:true,max:100,ticks:{stepSize:20,callback:v=>v+'%'},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{stacked:true,max:100,ticks:{stepSize:20,callback:v=>v+'%'},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
     plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:16,font:{size:11,weight:'300'}}},
       tooltip:{callbacks:{label:c=>{const n=lqRaw[c.dataset.label][c.dataIndex];return `${c.dataset.label}: ${n} source${n===1?'':'s'} (${c.raw}%)`}}}}}
 });
