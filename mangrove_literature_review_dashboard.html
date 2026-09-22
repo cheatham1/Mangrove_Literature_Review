@@ -133,8 +133,9 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
 .st-empty{padding:44px;text-align:center;color:#908E88;font-size:13px}
 @media(max-width:600px){.st .t-title{max-width:190px}}
 @media(max-width:700px){
-.sec:has(> .card):not(:has(> .g2)):not(:has(> .g2eq)):not(:has(> .g3)):not(:has(> .g3pie)){background:#fff;border-radius:14px;padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.04),0 4px 12px rgba(0,0,0,0.03)}
-.sec:has(> .card):not(:has(> .g2)):not(:has(> .g2eq)):not(:has(> .g3)):not(:has(> .g3pie)) > .card{background:transparent;box-shadow:none;padding:0;border-radius:0}
+.sec:has(> .card):not(:has(> .g2eq)):not(:has(> .g3)):not(:has(> .g3pie)),.sec:has(> .g2){background:#fff;border-radius:14px;padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.04),0 4px 12px rgba(0,0,0,0.03)}
+.sec:has(> .card):not(:has(> .g2eq)):not(:has(> .g3)):not(:has(> .g3pie)) .card,.sec:has(> .g2) .card{background:transparent;box-shadow:none;padding:0;border-radius:0}
+.sec:has(> .g2) .g2{gap:0}
 }
 </style>
 </head>
