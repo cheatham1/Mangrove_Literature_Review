@@ -51,6 +51,7 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
 .sec-s{font-size:12.5px;color:#908E88;margin-bottom:18px;font-weight:300;max-width:720px}
 .card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.04),0 4px 12px rgba(0,0,0,0.03)}
 .cbox{position:relative;width:100%}
+@media(max-width:700px){.cbox{min-height:340px}.cbox-bubble{min-height:480px}}
 
 /* Grids */
 .g2{display:grid;gap:20px;grid-template-columns:1.2fr .8fr}
@@ -266,7 +267,7 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
   <div class="sec">
     <div class="sec-t">Quantity vs quality by theme</div>
     <div class="sec-s">Each bubble is a theme: horizontal position is the number of sources, vertical position the mean quality score, and bubble size the share that is peer-reviewed. Plastic-pollution research is large, high-scoring and heavily peer-reviewed; policy is sizeable but lower-scoring and mostly non-peer-reviewed; mitigation is small but scores well.</div>
-    <div class="card"><div class="cbox" style="height:300px"><canvas id="cQuantQual"></canvas></div></div>
+    <div class="card"><div class="cbox cbox-bubble" style="height:300px"><canvas id="cQuantQual"></canvas></div></div>
   </div>
 
   <div class="sec">
@@ -344,6 +345,11 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
 
 <script>
 // ── Tab switching ──
+function _rcOnce(scope){document.querySelectorAll((scope||'')+'canvas').forEach(function(cv){var ch=(window.Chart&&Chart.getChart)?Chart.getChart(cv):null;if(ch){try{ch.resize();}catch(e){}}});}
+function _rc(scope){[0,120,300,650].forEach(function(d){setTimeout(function(){_rcOnce(scope);},d);});}
+window.addEventListener('load',function(){_rc('');});
+window.addEventListener('orientationchange',function(){_rc('');});
+var _rt;window.addEventListener('resize',function(){clearTimeout(_rt);_rt=setTimeout(function(){_rcOnce('');},200);});
 document.querySelectorAll('.sec').forEach(function(sec){
   if(sec.querySelector('.g3pie,.g2eq,.g3')) return;
   if(sec.querySelector('.card')) sec.classList.add('mblock');
@@ -355,11 +361,7 @@ document.querySelectorAll('.tab').forEach(btn=>{
     document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
     document.getElementById('p-'+t).classList.add('on');
     this.classList.add('on');
-    requestAnimationFrame(function(){
-      document.querySelectorAll('#p-'+t+' canvas').forEach(function(cv){
-        var ch=(window.Chart&&Chart.getChart)?Chart.getChart(cv):null; if(ch){ch.resize();}
-      });
-    });
+    _rc('#p-'+t+' ');
   });
 });
 

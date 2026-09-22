@@ -72,12 +72,15 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
 .sec-t{font-family:'Source Serif 4',Georgia,serif;font-size:17px;font-weight:600;color:#1A1A18;margin-bottom:4px}
 .sec-s{font-size:12.5px;color:#908E88;margin-bottom:18px;font-weight:300;max-width:720px}
 .card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.04),0 4px 12px rgba(0,0,0,0.03)}
+.cbox{position:relative;width:100%}
+@media(max-width:700px){.cbox{min-height:340px}.cbox-bubble{min-height:480px}}
 
 /* Grids */
 .g2{display:grid;gap:20px;grid-template-columns:1.2fr .8fr}
 .g2eq{display:grid;gap:20px;grid-template-columns:1fr 1fr}
 .g3{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
-.g3pie{display:grid;gap:20px;grid-template-columns:repeat(3,1fr)}
+.g3pie{display:grid;gap:20px;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:auto auto auto auto}
+.g3pie>.card{grid-row:1/-1;display:grid;grid-template-rows:subgrid}
 @media(max-width:700px){.g2,.g2eq,.g3pie{grid-template-columns:1fr}}
 
 /* Legend */
@@ -123,10 +126,10 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
 
 /* Pie chart label */
 .pie-label{text-align:center;font-size:12px;color:#5E5C56;font-weight:400;margin-top:6px}
-.pie-note{font-size:11.5px;color:#5E5C56;line-height:1.55;font-weight:300;margin-top:12px;padding-top:12px;border-top:1px solid #EDE9E3}
+.pie-note{font-size:11.5px;color:#5E5C56;line-height:1.55;font-weight:300;margin-top:5px;padding-top:8px;border-top:1px solid #EDE9E3}
 .pie-note strong{font-weight:500;color:#1A1A18}
-.g3pie .lg{min-height:80px;align-content:flex-start}
-@media(max-width:700px){.g3pie .lg{min-height:0}}
+.g3pie .lg{align-content:flex-start}
+@media(max-width:700px){.g3pie{grid-template-rows:none}.g3pie>.card{grid-row:auto;display:block}}
 
 .footer{margin-top:48px;padding-top:20px;border-top:1px solid #D8D5CE;font-size:11px;color:#908E88;text-align:center;font-weight:300}
 @media print{.tabs{display:none}.pnl{display:block!important;page-break-inside:avoid;margin-bottom:40px}}
@@ -152,6 +155,11 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
 .pill{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px;white-space:nowrap}
 .st-empty{padding:44px;text-align:center;color:#908E88;font-size:13px}
 @media(max-width:600px){.st .t-title{max-width:190px}}
+@media(max-width:700px){
+.sec.mblock{background:#fff;border-radius:14px;padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.04),0 4px 12px rgba(0,0,0,0.03)}
+.sec.mblock .card{background:transparent;box-shadow:none;padding:0;border-radius:0}
+.sec.mblock .g2{gap:0}
+}
 </style>
 </head>
 <body>
@@ -202,13 +210,13 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
   <div class="sec">
     <div class="sec-t">Evidence by thematic area</div>
     <div class="sec-s">Volume of evidence varies significantly across research themes. Plastic pollution state assessments have the strongest evidence base; mitigation practices and transboundary dynamics have the least.</div>
-    <div class="card"><canvas id="cArea" height="260"></canvas></div>
+    <div class="card"><div class="cbox" style="height:260px"><canvas id="cArea"></canvas></div></div>
   </div>
 
   <div class="sec">
     <div class="sec-t">Growth of the evidence base</div>
     <div class="sec-s">Research output has accelerated sharply since 2023, driven by the Global Plastics Treaty negotiations and growing recognition of mangroves as pollutant sinks. Mitigation research is the most recent theme — 77% published since 2023. Breaking the yearly output down by theme shows what drove that growth: impact assessment surged around 2023, while policy and ecosystem-services research accelerated most in 2024–2026. Each bar's total height is the year's overall output.</div>
-    <div class="card"><canvas id="cYearStack" height="240"></canvas></div>
+    <div class="card"><div class="cbox" style="height:240px"><canvas id="cYearStack"></canvas></div></div>
   </div>
 
   <div class="sec">
@@ -225,14 +233,14 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
         </div>
       </div>
     </div>
-    <div class="card" style="margin-top:20px"><canvas id="cFocusTheme" height="260"></canvas></div>
+    <div class="card" style="margin-top:20px"><div class="cbox" style="height:260px"><canvas id="cFocusTheme"></canvas></div></div>
     <div style="font-size:12px;color:#908E88;margin-top:12px;font-weight:300">Direct evidence is heavily concentrated in plastic-pollution state assessments (61 of 86). Impact, transboundary, microplastics, and policy themes rely predominantly on adjacent-ecosystem proxy evidence.</div>
   </div>
 
   <div class="sec">
     <div class="sec-t">Is the field moving toward direct mangrove study?</div>
     <div class="sec-s">Focus specificity over time. Direct in-mangrove studies have grown in volume — from 10 before 2016 to 41 across 2023–26 — but their share of output has held near a third, because adjacent-ecosystem proxy work has grown just as fast. The corpus is expanding without becoming proportionally more mangrove-specific.</div>
-    <div class="card"><canvas id="cFocusYear" height="200"></canvas></div>
+    <div class="card"><div class="cbox" style="height:200px"><canvas id="cFocusYear"></canvas></div></div>
   </div>
 
 </div>
@@ -250,14 +258,14 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
   <div class="sec">
     <div class="sec-t">Source types across thematic areas</div>
     <div class="sec-s">Peer-reviewed evidence is strongest in plastic pollution research (84%) and transboundary research (83%), but weakest in policy analysis (16%), which relies heavily on intergovernmental and legal sources.</div>
-    <div class="card"><canvas id="cEvType" height="280"></canvas></div>
+    <div class="card"><div class="cbox" style="height:280px"><canvas id="cEvType"></canvas></div></div>
   </div>
 
   <div class="sec">
     <div class="sec-t">Quality score distribution</div>
     <div class="sec-s">Sources were scored on focus relevance (0–10), literature type (3–5), keyword match (0–3), and geographic specificity (0–3), giving a maximum of 21.</div>
     <div class="g2">
-      <div class="card"><canvas id="cScore" height="220"></canvas></div>
+      <div class="card"><div class="cbox" style="height:220px"><canvas id="cScore"></canvas></div></div>
       <div class="card">
         <div style="font-size:13px;font-weight:500;margin-bottom:12px">Quality bands</div>
         <div id="qualBands"></div>
@@ -269,19 +277,19 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
   <div class="sec">
     <div class="sec-t">Evidence quality by thematic area</div>
     <div class="sec-s">Mean quality score per theme. Plastic-pollution state assessments score highest (96%), reflecting on-target, peer-reviewed fieldwork; policy and ecosystem-services evidence scores lowest (~72%), where grey literature and broad-scope studies dominate. Lower-scoring themes are where evidence is thinnest and least mangrove-specific.</div>
-    <div class="card"><canvas id="cQualTheme" height="230"></canvas></div>
+    <div class="card"><div class="cbox" style="height:230px"><canvas id="cQualTheme"></canvas></div></div>
   </div>
 
   <div class="sec">
     <div class="sec-t">Quality by source type</div>
     <div class="sec-s">How each literature type distributes across the quality bands — bars show composition, with source counts in brackets. Peer-reviewed, grey, intergovernmental and policy sources are almost entirely high-band; conference and newsletter material skews medium, and the only low-scoring items are two map/database records with minimal focus relevance.</div>
-    <div class="card"><canvas id="cQualType" height="210"></canvas></div>
+    <div class="card"><div class="cbox" style="height:210px"><canvas id="cQualType"></canvas></div></div>
   </div>
 
   <div class="sec">
     <div class="sec-t">Quantity vs quality by theme</div>
     <div class="sec-s">Each bubble is a theme: horizontal position is the number of sources, vertical position the mean quality score, and bubble size the share that is peer-reviewed. Plastic-pollution research is large, high-scoring and heavily peer-reviewed; policy is sizeable but lower-scoring and mostly non-peer-reviewed; mitigation is small but scores well.</div>
-    <div class="card"><canvas id="cQuantQual" height="300"></canvas></div>
+    <div class="card"><div class="cbox cbox-bubble" style="height:300px"><canvas id="cQuantQual"></canvas></div></div>
   </div>
 
   <div class="sec">
@@ -313,7 +321,7 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
   <div class="sec">
     <div class="sec-t">The field-work gap: direct vs proxy evidence by region</div>
     <div class="sec-s">Raw source counts understate the geographic imbalance. Splitting each region by how directly it studies mangroves shows that outside Asia/Middle East, almost no <em>direct</em> on-mangrove field research exists — Europe has none, and the Pacific just one. Much regional evidence is adjacent-ecosystem or global-scope work applied by inference.</div>
-    <div class="card"><canvas id="cRegionFocus" height="240"></canvas></div>
+    <div class="card"><div class="cbox" style="height:240px"><canvas id="cRegionFocus"></canvas></div></div>
     <div style="font-size:12px;color:#908E88;margin-top:14px;font-weight:300">Asia/Middle East is the only region where direct mangrove field studies (38) outnumber proxy evidence. Global sources contribute 39 direct studies but are not tied to a specific site. Africa, the Americas, Europe, and the Pacific together account for just 9 direct on-mangrove studies.</div>
   </div>
 
@@ -359,12 +367,23 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
 
 <script>
 // ── Tab switching ──
+function _rcOnce(scope){document.querySelectorAll((scope||'')+'canvas').forEach(function(cv){var ch=(window.Chart&&Chart.getChart)?Chart.getChart(cv):null;if(ch){try{ch.resize();}catch(e){}}});}
+function _rc(scope){[0,120,300,650].forEach(function(d){setTimeout(function(){_rcOnce(scope);},d);});}
+window.addEventListener('load',function(){_rc('');});
+window.addEventListener('orientationchange',function(){_rc('');});
+var _rt;window.addEventListener('resize',function(){clearTimeout(_rt);_rt=setTimeout(function(){_rcOnce('');},200);});
+document.querySelectorAll('.sec').forEach(function(sec){
+  if(sec.querySelector('.g3pie,.g2eq,.g3')) return;
+  if(sec.querySelector('.card')) sec.classList.add('mblock');
+});
 document.querySelectorAll('.tab').forEach(btn=>{
   btn.addEventListener('click',function(){
+    var t=this.dataset.t;
     document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('on'));
     document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
-    document.getElementById('p-'+this.dataset.t).classList.add('on');
+    document.getElementById('p-'+t).classList.add('on');
     this.classList.add('on');
+    _rc('#p-'+t+' ');
   });
 });
 
@@ -440,10 +459,10 @@ new Chart(document.getElementById('pieFocus'),{
 // Bar: Research area
 new Chart(document.getElementById('cArea'),{
   type:'bar',
-  data:{labels:['Plastic pollution\nin mangroves','Policy &\ngovernance','Microplastics,\nadditives & POPs','Ecosystem services\n& linkages','Impact\nassessment','Mitigation &\nclean-up','Transboundary\nriverine pollution'],
+  data:{labels:[['Plastic pollution','in mangroves'],['Policy &','governance'],['Microplastics,','additives & POPs'],['Ecosystem services','& linkages'],['Impact','assessment'],['Mitigation &','clean-up'],['Transboundary','riverine pollution']],
     datasets:[{data:[70,38,28,32,61,13,18],backgroundColor:C,borderRadius:4,barThickness:22}]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{ticks:{font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
     plugins:{tooltip:{callbacks:{label:c=>c.raw+' sources'}}}}
 });
 
@@ -477,7 +496,7 @@ new Chart(document.getElementById('cFocusTheme'),{
     {label:'Adjacent ecosystems (proxy)',data:[3,29,18,2,46,8,14],backgroundColor:'#C05530',borderRadius:2,barThickness:22}
   ]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
     plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:16,font:{size:11,weight:'300'}}},tooltip:{mode:'index',intersect:false}}}
 });
 
@@ -529,7 +548,7 @@ new Chart(document.getElementById('cEvType'),{
     {label:'Conferences / other',data:[1,0,0,6,1,2,1],backgroundColor:'#888780',borderRadius:2,barThickness:22}
   ]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
     plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:16,font:{size:11,weight:'300'}}},tooltip:{mode:'index',intersect:false}}}
 });
 
@@ -584,7 +603,7 @@ new Chart(document.getElementById('cRegionFocus'),{
     {label:'Adjacent ecosystems (proxy)',data:[81,10,6,7,8,4],backgroundColor:'#C05530',borderRadius:2,barThickness:20}
   ]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{stacked:true,ticks:{stepSize:20},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{font:{size:12}},border:{display:false},grid:{display:false}}},
+    scales:{x:{stacked:true,ticks:{stepSize:20},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{autoSkip:false,font:{size:12}},border:{display:false},grid:{display:false}}},
     plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:16,font:{size:11,weight:'300'}}},tooltip:{mode:'index',intersect:false}}}
 });
 
@@ -640,7 +659,7 @@ new Chart(document.getElementById('cQualTheme'),{
   type:'bar',
   data:{labels:qtData.map(d=>d[0]),datasets:[{data:qtData.map(d=>d[1]),backgroundColor:qtData.map(d=>d[2]),borderRadius:4,barThickness:22}]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{min:0,max:100,ticks:{stepSize:20,callback:v=>v+'%'},border:{display:false},grid:{color:gridColor}},y:{ticks:{font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{min:0,max:100,ticks:{stepSize:20,callback:v=>v+'%'},border:{display:false},grid:{color:gridColor}},y:{ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
     plugins:{tooltip:{callbacks:{label:c=>c.raw+'% mean quality score'}}}}
 });
 
@@ -708,7 +727,7 @@ new Chart(document.getElementById('cQualType'),{
     {label:'Low (≤40%)',data:lqPct['Low (≤40%)'],backgroundColor:'#D63B26',borderRadius:2,barThickness:22}
   ]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{stacked:true,max:100,ticks:{stepSize:20,callback:v=>v+'%'},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{stacked:true,max:100,ticks:{stepSize:20,callback:v=>v+'%'},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
     plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:16,font:{size:11,weight:'300'}}},
       tooltip:{callbacks:{label:c=>{const n=lqRaw[c.dataset.label][c.dataIndex];return `${c.dataset.label}: ${n} source${n===1?'':'s'} (${c.raw}%)`}}}}}
 });
