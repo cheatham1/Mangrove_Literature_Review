@@ -25,15 +25,12 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
 .tab[data-t="summary"]{color:#1B7A5A;border-color:#1B7A5A}
 .tab[data-t="themes"]{color:#5C3DAF;border-color:#5C3DAF}
 .tab[data-t="evidence"]{color:#2E5FA1;border-color:#2E5FA1}
-.tab[data-t="gaps"]{color:#C05530;border-color:#C05530}
 .tab[data-t="summary"]:hover{background:#E1F5EE}
 .tab[data-t="themes"]:hover{background:#E4DFF5}
 .tab[data-t="evidence"]:hover{background:#E6F1FB}
-.tab[data-t="gaps"]:hover{background:#FAECE7}
 .tab[data-t="summary"].on{background:#1B7A5A;color:#fff}
 .tab[data-t="themes"].on{background:#5C3DAF;color:#fff}
 .tab[data-t="evidence"].on{background:#2E5FA1;color:#fff}
-.tab[data-t="gaps"].on{background:#C05530;color:#fff}
 .tab.on{box-shadow:0 2px 8px rgba(0,0,0,0.12)}
 .pnl{display:none;animation:fi .3s ease}.pnl.on{display:block}
 @keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -158,7 +155,6 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
   <button class="tab on" data-t="summary">Summary of evidence</button>
   <button class="tab" data-t="themes">Thematic findings</button>
   <button class="tab" data-t="evidence">Evidence landscape</button>
-  <button class="tab" data-t="gaps">Knowledge gaps</button>
   <button class="tab" data-t="sources">Source table</button>
 </div>
 
@@ -287,41 +283,6 @@ body{font-family:'Outfit',system-ui,sans-serif;background:#F6F4F0;color:#1A1A18;
 </div>
 
 <!-- ========== GAPS ========== -->
-<div id="p-gaps" class="pnl">
-  <div class="ins">This section identifies areas where the evidence base is thin, geographically uneven, or methodologically limited. These gaps represent priorities for future research and targeted evidence-gathering before policy recommendations can be made with confidence.</div>
-
-  <div class="sec">
-    <div class="sec-t">Geographic evidence gaps</div>
-    <div class="sec-s">Regions with significant mangrove ecosystems but limited or absent research coverage.</div>
-    <div class="g2eq" id="geoGapCards"></div>
-  </div>
-
-  <div class="sec">
-    <div class="sec-t">The field-work gap: direct vs proxy evidence by region</div>
-    <div class="sec-s">Raw source counts understate the geographic imbalance. Splitting each region by how directly it studies mangroves shows that outside Asia/Middle East, almost no <em>direct</em> on-mangrove field research exists — Europe has none, and the Pacific just one. Much regional evidence is adjacent-ecosystem or global-scope work applied by inference.</div>
-    <div class="card"><div class="cbox" style="height:240px"><canvas id="cRegionFocus"></canvas></div></div>
-    <div style="font-size:12px;color:#908E88;margin-top:14px;font-weight:300">Asia/Middle East is the only region where direct mangrove field studies (38) outnumber proxy evidence. Global sources contribute 39 direct studies but are not tied to a specific site. Africa, the Americas, Europe, and the Pacific together account for just 9 direct on-mangrove studies.</div>
-  </div>
-
-  <div class="sec">
-    <div class="sec-t">Thematic evidence gaps</div>
-    <div class="sec-s">Topics where the current evidence base is insufficient to support robust conclusions.</div>
-    <div id="themeGapList"></div>
-  </div>
-
-  <div class="sec">
-    <div class="sec-t">Evidence recency by theme</div>
-    <div class="sec-s">Proportion of sources published since 2023. Mitigation research is the most recent (77%); microplastics/POPs and impact assessment have the oldest evidence profiles (36% and 39%).</div>
-    <div class="card" id="recencyBars"></div>
-  </div>
-
-  <div class="sec">
-    <div class="sec-t">Recommendations for future research</div>
-    <div class="sec-s">Based on the gaps identified above, the following priorities emerge for strengthening the evidence base.</div>
-    <div class="card" id="recsList" style="font-size:13px;color:#5E5C56;line-height:1.8;font-weight:300"></div>
-  </div>
-</div>
-
 <!-- ========== SOURCE TABLE ========== -->
 <div id="p-sources" class="pnl">
   <div class="ins">Browse and filter all 260 sources in the review. Search by title or author, narrow by theme, region, focus, or quality band, and click any column header to sort. Follow the link to open each source.</div>
@@ -559,64 +520,6 @@ hh+='</tbody>';document.getElementById('htable').innerHTML=hh;
 const kws=[{k:'Social impacts',v:121},{k:'Assessment methodology',v:113},{k:'Biodiversity',v:79},{k:'Coastal debris pathways',v:79},{k:'Mangrove',v:72},{k:'Mangrove ecosystem services',v:65},{k:'Contaminants',v:61},{k:'Integrated coastal governance',v:60},{k:'Plastic debris / microplastic',v:59},{k:'POPs human health effects',v:58},{k:'Mangrove debris accumulation',v:54},{k:'Marine litter governance',v:51},{k:'Chemicals governance',v:51},{k:'Land-based plastic leakage',v:45}];
 const kwG=document.getElementById('kwGrid');
 kws.forEach(kw=>{kwG.innerHTML+=`<div class="kw-r"><div class="kw-l">${kw.k}</div><div class="kw-bt"><div class="kw-bf" style="width:${(kw.v/121*100).toFixed(0)}%"></div></div><div class="kw-c">${kw.v}</div></div>`});
-
-// ══════════════ GAPS TAB ══════════════
-
-// Geo gaps
-const ggs=[
-  {r:'Pacific / Oceania',v:'7',n:'Papua New Guinea, Fiji, and Solomon Islands have extensive mangrove systems but are nearly absent from the evidence base. The 7 Pacific-tagged sources cover deep-sea POPs, Fiji microplastics in fish, and NZ mangrove ecology — none specifically study plastic pollution within Pacific mangroves.'},
-  {r:'Americas',v:'17',n:'Brazil has the second-largest mangrove area globally; the 17 Americas-tagged sources remain thin relative to that mangrove extent. Caribbean island states, facing acute waste management challenges, are particularly underrepresented.'},
-  {r:'West Africa',v:'~3',n:'Nigeria and Cameroon contain significant mangrove forests. Most African evidence focuses on East Africa; West African mangrove-plastic interactions are essentially unstudied.'},
-  {r:'Middle East',v:'unclear',n:'Grouped with Asia in the dataset. Gulf and Red Sea mangrove systems face distinct pollution pressures from petrochemical industries but cannot be disaggregated.'}
-];
-const ggEl=document.getElementById('geoGapCards');
-ggs.forEach(g=>{ggEl.innerHTML+=`<div class="fc"><div style="font-size:13px;font-weight:500">${g.r}</div><div style="font-family:'Source Serif 4',Georgia,serif;font-size:24px;font-weight:600;color:#C05530;margin:2px 0">${g.v} sources</div><div style="font-size:11.5px;color:#908E88;line-height:1.5;font-weight:300">${g.n}</div></div>`});
-
-// Region x focus: field-work gap
-new Chart(document.getElementById('cRegionFocus'),{
-  type:'bar',
-  data:{labels:['Global','Asia / Middle East','Africa','Americas','Europe','Pacific / Oceania'],datasets:[
-    {label:'Direct — in mangroves',data:[39,38,3,5,0,1],backgroundColor:'#1B7A5A',borderRadius:2,barThickness:20},
-    {label:'Mangrove-general',data:[28,11,8,5,0,2],backgroundColor:'#8B6914',borderRadius:2,barThickness:20},
-    {label:'Adjacent ecosystems (proxy)',data:[81,10,6,7,8,4],backgroundColor:'#C05530',borderRadius:2,barThickness:20}
-  ]},
-  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{stacked:true,ticks:{stepSize:20},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{autoSkip:false,font:{size:12}},border:{display:false},grid:{display:false}}},
-    plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:16,font:{size:11,weight:'300'}}},tooltip:{mode:'index',intersect:false}}}
-});
-
-// Theme gaps
-const tgs=[
-  {t:'Mitigation effectiveness evidence',d:'13 sources describe interventions but few evaluate outcomes. Cost-effectiveness data and longitudinal impact assessments are absent.'},
-
-  {t:'Transboundary corridor case studies',d:'Of 18 transboundary sources, only one primary field study (Niger Delta mangrove sediments) and one grey-literature commentary (Sundarbans / Ganges-Brahmaputra-Meghna) examine specific river-to-mangrove corridors. The Mekong, other major Asian deltas, and most South American river systems remain unstudied.'},
-  {t:'Nanoplastics in mangrove systems',d:'No sources specifically address nanoplastic contamination in mangroves, despite growing evidence of nanoplastic presence in marine environments.'},
-  {t:'Economic valuation of pollution impacts',d:'Ecosystem services are well documented (32 sources) but economic quantification of damage — costs to fisheries, tourism, coastal protection — is largely absent.'},
-  {t:'Community and indigenous knowledge',d:'Social impacts are frequently tagged (121 sources) but most measure socioeconomic indicators rather than incorporating local or indigenous perspectives.'},
-  {t:'Microplastic-POPs interaction pathways',d:'Microplastics and POPs are studied separately but the mechanism by which plastics act as vectors for POPs in mangrove food webs has limited dedicated research.'}
-];
-const tgEl=document.getElementById('themeGapList');
-tgs.forEach(g=>{tgEl.innerHTML+=`<div style="display:flex;gap:12px;align-items:flex-start;background:#fff;border-radius:10px;padding:12px 16px;border:1px solid #D8D5CE;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,0.04)"><div style="width:6px;height:6px;border-radius:50%;background:#C05530;margin-top:6px;flex-shrink:0"></div><div><div style="font-size:12.5px;font-weight:500">${g.t}</div><div style="font-size:11.5px;color:#908E88;margin-top:2px;font-weight:300">${g.d}</div></div></div>`});
-
-// Recency bars
-const rbEl=document.getElementById('recencyBars');
-[{a:'Mitigation & clean-up',p:77,c:'#1B7A5A'},{a:'Policy & governance',p:61,c:'#1B7A5A'},{a:'Ecosystem services',p:56,c:'#2E5FA1'},{a:'Transboundary riverine',p:50,c:'#2E5FA1'},{a:'Plastic pollution in mangroves',p:44,c:'#8B6914'},{a:'Impact assessment',p:39,c:'#C05530'},{a:'Microplastics & POPs',p:36,c:'#C05530'}].forEach(r=>{
-  rbEl.innerHTML+=`<div class="pr"><div class="pr-l">${r.a}</div><div class="pr-t"><div class="pr-f" style="width:${r.p}%;background:${r.c}"></div></div><div class="pr-v">${r.p}%</div></div>`;
-});
-
-// Recommendations
-const recs=[
-  'Prioritise field studies in the Pacific Islands, West Africa, and the Americas to address the geographic imbalance in the evidence base.',
-  'Commission transboundary case studies on specific river-to-mangrove corridors (Mekong, Niger, Ganges) to complement existing global-level analyses.',
-  'Fund longitudinal studies evaluating the effectiveness of mangrove clean-up and mitigation interventions, including cost-benefit analyses.',
-  'Investigate nanoplastic contamination in mangrove sediments and biota as an emerging pollutant class.',
-  'Integrate community and indigenous knowledge into impact assessments, moving beyond quantitative socioeconomic indicators.',
-  'Support research on plastics as vectors for POPs transport in mangrove food webs, bridging the current siloed treatment of these pollutant classes.',
-  'Disaggregate Middle East mangrove research from the broader Asia category to capture petrochemical-specific pollution dynamics.',
-  'Establish standardised assessment methodologies for plastic pollution in mangroves to enable cross-site and cross-regional comparisons.'
-];
-const rcEl=document.getElementById('recsList');
-recs.forEach((r,i)=>{rcEl.innerHTML+=`<div style="display:flex;gap:10px;padding:6px 0;${i<recs.length-1?'border-bottom:1px solid #EDE9E3':''}"><span style="color:#1B7A5A;font-weight:500;flex-shrink:0">${i+1}.</span>${r}</div>`});
 
 // ══════════════ NEW: focus specificity over time ══════════════
 new Chart(document.getElementById('cFocusYear'),{
