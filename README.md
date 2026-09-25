@@ -7,7 +7,6 @@ Interactive dashboard for exploring findings from a scoping review of **plastic 
 - **Summary of evidence** — headline metrics; breakdowns by literature type, geographic region, quality band, and focus specificity (each pie annotated with a short insight); research-area volumes; the publication timeline by theme; and focus specificity over time.
 - **Thematic findings** — a profile for each of the 7 research areas, with source counts, share peer-reviewed, recency, leading region, and characteristic keywords.
 - **Evidence landscape** — literature-type composition, quality-score distribution and bands, mean quality by theme, quality by source type, a quantity-vs-quality bubble view, the research-area × region heatmap, and keyword frequencies.
-- **Knowledge gaps** — geographic and thematic gaps, evidence recency by theme, and numbered research-priority recommendations.
 - **Source table** — a searchable, sortable table of all 260 sources. Filter by theme, source type, region, focus specificity, or quality band, and follow the link to each source.
 
 ## Dataset columns
