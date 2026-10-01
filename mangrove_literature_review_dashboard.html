@@ -617,9 +617,9 @@ new Chart(document.getElementById('cQualType'),{
 const bub=[{"nm": "Mitigation", "n": 13, "q": 80.6, "pr": 46, "c": "#993556"}, {"nm": "Transboundary", "n": 18, "q": 75.9, "pr": 83, "c": "#3B8BD4"}, {"nm": "Microplastics", "n": 28, "q": 83.0, "pr": 82, "c": "#8B6914"}, {"nm": "Ecosystem svc.", "n": 32, "q": 71.6, "pr": 50, "c": "#5C3DAF"}, {"nm": "Policy", "n": 38, "q": 72.4, "pr": 16, "c": "#2E5FA1"}, {"nm": "Impact", "n": 61, "q": 77.9, "pr": 79, "c": "#C05530"}, {"nm": "Plastic pollution", "n": 70, "q": 96.1, "pr": 84, "c": "#1B7A5A"}];
 new Chart(document.getElementById('cQuantQual'),{
   type:'bubble',
-  data:{datasets:bub.map(b=>({label:b.nm,data:[{x:b.n,y:b.q,r:8+b.pr*0.18,pr:b.pr}],backgroundColor:b.c+'99',borderColor:b.c,borderWidth:1.5}))},
+  data:{datasets:bub.map(b=>({label:b.nm,data:[{x:b.n,y:b.q,r:8+b.pr*0.18,pr:b.pr}],backgroundColor:b.c+'99',borderColor:b.c,borderWidth:1.5,clip:false}))},
   options:{responsive:true,maintainAspectRatio:false,
-    scales:{x:{min:0,suggestedMax:75,title:{display:true,text:'Number of source documents',font:{size:11,weight:'400'},color:'#4A4A46'},border:{display:false},grid:{color:gridColor}},
+    layout:{padding:{top:16,right:18,left:4}},scales:{x:{min:0,suggestedMax:75,title:{display:true,text:'Number of source documents',font:{size:11,weight:'400'},color:'#4A4A46'},border:{display:false},grid:{color:gridColor}},
             y:{min:65,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Mean quality score (%)',font:{size:11,weight:'400'},color:'#4A4A46'},border:{display:false},grid:{color:gridColor}}},
     plugins:{legend:{display:true,position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:10,padding:14,font:{size:11,weight:'300'}}},
       tooltip:{callbacks:{title:()=>'',label:c=>`${c.dataset.label}: ${c.raw.x} sources · ${c.raw.y}% mean quality · ${c.raw.pr}% peer-reviewed`}}}}
