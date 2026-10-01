@@ -401,7 +401,7 @@ new Chart(document.getElementById('cArea'),{
   data:{labels:[['Plastic pollution','in mangroves'],['Policy &','governance'],['Microplastics,','additives & POPs'],['Ecosystem services','& linkages'],['Impact','assessment'],['Mitigation &','clean-up'],['Transboundary','riverine pollution']],
     datasets:[{data:[70,38,28,32,61,13,18],backgroundColor:C,borderRadius:4,barThickness:22}]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{ticks:{stepSize:10},border:{display:false},grid:{color:gridColor},title:{display:true,text:'Number of source documents',font:{size:11,weight:'400'},color:'#4A4A46'}},y:{ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false},title:{display:true,text:'Thematic area',font:{size:11,weight:'400'},color:'#4A4A46'}}},
     plugins:{tooltip:{callbacks:{label:c=>c.raw+' sources'}}}}
 });
 
@@ -421,7 +421,7 @@ new Chart(document.getElementById('cYearStack'),{
   type:'bar',
   data:{labels:yearBins,datasets:themeYear.map(t=>({label:t.label,data:t.data,backgroundColor:t.color,borderRadius:2,barThickness:24}))},
   options:{responsive:true,maintainAspectRatio:false,
-    scales:{x:{stacked:true,border:{display:false},grid:{display:false}},y:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}}},
+    scales:{x:{stacked:true,border:{display:false},grid:{display:false},title:{display:true,text:'Year',font:{size:11,weight:'400'},color:'#4A4A46'}},y:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor},title:{display:true,text:'Number of source documents',font:{size:11,weight:'400'},color:'#4A4A46'}}},
     plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:14,font:{size:11,weight:'300'}}},tooltip:{mode:'index',intersect:false}}}
 });
 
@@ -435,7 +435,7 @@ new Chart(document.getElementById('cFocusTheme'),{
     {label:'Adjacent ecosystems (proxy)',data:[3,29,18,2,46,8,14],backgroundColor:'#C05530',borderRadius:2,barThickness:22}
   ]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor},title:{display:true,text:'Number of source documents',font:{size:11,weight:'400'},color:'#4A4A46'}},y:{stacked:true,ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false},title:{display:true,text:'Thematic area',font:{size:11,weight:'400'},color:'#4A4A46'}}},
     plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:16,font:{size:11,weight:'300'}}},tooltip:{mode:'index',intersect:false}}}
 });
 
@@ -487,7 +487,7 @@ new Chart(document.getElementById('cEvType'),{
     {label:'Conferences / other',data:[1,0,0,6,1,2,1],backgroundColor:'#888780',borderRadius:2,barThickness:22}
   ]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor},title:{display:true,text:'Number of source documents',font:{size:11,weight:'400'},color:'#4A4A46'}},y:{stacked:true,ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false},title:{display:true,text:'Thematic area',font:{size:11,weight:'400'},color:'#4A4A46'}}},
     plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:16,font:{size:11,weight:'300'}}},tooltip:{mode:'index',intersect:false}}}
 });
 
@@ -497,7 +497,7 @@ new Chart(document.getElementById('cScore'),{
   data:{labels:['38','52','57','62','67','71','76','90','95','100'],
     datasets:[{data:[2,1,2,3,4,63,99,1,14,71],backgroundColor:['#D63B26','#E89030','#E89030','#E89030','#E89030','#1B7A5A','#1B7A5A','#1B7A5A','#1B7A5A','#1B7A5A'],borderRadius:4,barThickness:26}]},
   options:{responsive:true,maintainAspectRatio:false,
-    scales:{x:{border:{display:false},grid:{display:false},title:{display:true,text:'Quality score (%)',font:{size:11,weight:'300'},color:'#908E88'}},y:{title:{display:true,text:'Number of sources',font:{size:11,weight:'300'},color:'#908E88'},ticks:{stepSize:20},border:{display:false},grid:{color:gridColor}}},
+    scales:{x:{border:{display:false},grid:{display:false},title:{display:true,text:'Quality score (%)',font:{size:11,weight:'400'},color:'#4A4A46'}},y:{title:{display:true,text:'Number of source documents',font:{size:11,weight:'400'},color:'#4A4A46'},ticks:{stepSize:20},border:{display:false},grid:{color:gridColor}}},
     plugins:{tooltip:{callbacks:{label:c=>c.raw+' sources'}}}}
 });
 
@@ -530,7 +530,7 @@ new Chart(document.getElementById('cFocusYear'),{
     {label:'Adjacent ecosystems (proxy)',data:[15, 3, 3, 3, 7, 10, 14, 8, 20, 13, 9, 15],backgroundColor:'rgba(192,85,48,.55)',borderColor:'#C05530',fill:true,tension:.3,pointRadius:0,borderWidth:1.5}
   ]},
   options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-    scales:{x:{stacked:true,border:{display:false},grid:{display:false}},y:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor},title:{display:true,text:'Sources published',font:{size:11,weight:'300'},color:'#908E88'}}},
+    scales:{x:{stacked:true,border:{display:false},grid:{display:false},title:{display:true,text:'Year',font:{size:11,weight:'400'},color:'#4A4A46'}},y:{stacked:true,ticks:{stepSize:10},border:{display:false},grid:{color:gridColor},title:{display:true,text:'Number of source documents',font:{size:11,weight:'400'},color:'#4A4A46'}}},
     plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:16,font:{size:11,weight:'300'}}},tooltip:{mode:'index',intersect:false}}}
 });
 
@@ -540,7 +540,7 @@ new Chart(document.getElementById('cQualTheme'),{
   type:'bar',
   data:{labels:qtData.map(d=>d[0]),datasets:[{data:qtData.map(d=>d[1]),backgroundColor:qtData.map(d=>d[2]),borderRadius:4,barThickness:22}]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{min:0,max:100,ticks:{stepSize:20,callback:v=>v+'%'},border:{display:false},grid:{color:gridColor}},y:{ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{min:0,max:100,ticks:{stepSize:20,callback:v=>v+'%'},border:{display:false},grid:{color:gridColor},title:{display:true,text:'Mean quality score (%)',font:{size:11,weight:'400'},color:'#4A4A46'}},y:{ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false},title:{display:true,text:'Thematic area',font:{size:11,weight:'400'},color:'#4A4A46'}}},
     plugins:{tooltip:{callbacks:{label:c=>c.raw+'% mean quality score'}}}}
 });
 
@@ -603,12 +603,12 @@ const lqPct={'High (>70%)':[98.3,97.9,95,100,16.7,60],'Medium (40–70%)':[1.7,2
 new Chart(document.getElementById('cQualType'),{
   type:'bar',
   data:{labels:lqLabels,datasets:[
-    {label:'High (>70%)',data:lqPct['High (>70%)'],backgroundColor:'#1B7A5A',borderRadius:2,barThickness:22},
-    {label:'Medium (40–70%)',data:lqPct['Medium (40–70%)'],backgroundColor:'#E89030',borderRadius:2,barThickness:22},
-    {label:'Low (≤40%)',data:lqPct['Low (≤40%)'],backgroundColor:'#D63B26',borderRadius:2,barThickness:22}
+    {label:'High (>70%)',data:lqPct['High (>70%)'],backgroundColor:'#1B7A5A',borderRadius:2,categoryPercentage:0.74,barPercentage:1},
+    {label:'Medium (40–70%)',data:lqPct['Medium (40–70%)'],backgroundColor:'#E89030',borderRadius:2,categoryPercentage:0.74,barPercentage:1},
+    {label:'Low (≤40%)',data:lqPct['Low (≤40%)'],backgroundColor:'#D63B26',borderRadius:2,categoryPercentage:0.74,barPercentage:1}
   ]},
   options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    scales:{x:{stacked:true,max:100,ticks:{stepSize:20,callback:v=>v+'%'},border:{display:false},grid:{color:gridColor}},y:{stacked:true,ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false}}},
+    scales:{x:{stacked:true,max:100,ticks:{stepSize:20,callback:v=>v+'%'},border:{display:false},grid:{color:gridColor},title:{display:true,text:'Share of sources (%)',font:{size:11,weight:'400'},color:'#4A4A46'}},y:{stacked:true,ticks:{autoSkip:false,font:{size:11.5}},border:{display:false},grid:{display:false},title:{display:true,text:'Source type',font:{size:11,weight:'400'},color:'#4A4A46'}}},
     plugins:{legend:{display:true,position:'bottom',labels:{boxWidth:18,boxHeight:12,padding:16,font:{size:11,weight:'300'}}},
       tooltip:{callbacks:{label:c=>{const n=lqRaw[c.dataset.label][c.dataIndex];return `${c.dataset.label}: ${n} source${n===1?'':'s'} (${c.raw}%)`}}}}}
 });
@@ -619,8 +619,8 @@ new Chart(document.getElementById('cQuantQual'),{
   type:'bubble',
   data:{datasets:bub.map(b=>({label:b.nm,data:[{x:b.n,y:b.q,r:8+b.pr*0.18,pr:b.pr}],backgroundColor:b.c+'99',borderColor:b.c,borderWidth:1.5}))},
   options:{responsive:true,maintainAspectRatio:false,
-    scales:{x:{min:0,suggestedMax:75,title:{display:true,text:'Number of sources',font:{size:11,weight:'300'},color:'#908E88'},border:{display:false},grid:{color:gridColor}},
-            y:{min:65,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Mean quality score',font:{size:11,weight:'300'},color:'#908E88'},border:{display:false},grid:{color:gridColor}}},
+    scales:{x:{min:0,suggestedMax:75,title:{display:true,text:'Number of source documents',font:{size:11,weight:'400'},color:'#4A4A46'},border:{display:false},grid:{color:gridColor}},
+            y:{min:65,max:100,ticks:{callback:v=>v+'%'},title:{display:true,text:'Mean quality score (%)',font:{size:11,weight:'400'},color:'#4A4A46'},border:{display:false},grid:{color:gridColor}}},
     plugins:{legend:{display:true,position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:10,padding:14,font:{size:11,weight:'300'}}},
       tooltip:{callbacks:{title:()=>'',label:c=>`${c.dataset.label}: ${c.raw.x} sources · ${c.raw.y}% mean quality · ${c.raw.pr}% peer-reviewed`}}}}
 });
